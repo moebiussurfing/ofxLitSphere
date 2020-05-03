@@ -71,5 +71,13 @@ void DisplacementSphereMesh::setNormals( ofMesh &mesh ){
         norm[i].normalize();
     }
     mesh.clearNormals();
-    mesh.addNormals( norm );
+//    mesh.addNormals( norm );
+
+    vector<glm::vec3> normG( nV );
+    for (int i=0; i<nV; i++)
+    {
+        normG[i] = glm::vec3(norm[i].x, norm[i].y, norm[i].z);
+    }
+    mesh.addNormals( normG );
+    ;
 }

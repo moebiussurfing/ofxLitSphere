@@ -11,6 +11,7 @@ public:
     void draw();
     
     void mousePressed(int x, int y, int button);
+    void keyPressed(int key);
     
     ofxLitSphere litSphere;
 };

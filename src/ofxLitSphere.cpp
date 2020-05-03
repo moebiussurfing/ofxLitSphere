@@ -36,6 +36,8 @@ void ofxLitSphere::loadNext() {
     string fileName = dir.getPath(current);
     ofLogVerbose("ofxLitSphere", "fileName " + fileName);
     texture.load(fileName);
+
+    matName=fileName;
 }
 
 void ofxLitSphere::loadPrevious() {
@@ -48,6 +50,8 @@ void ofxLitSphere::loadPrevious() {
     string fileName = dir.getPath(current);
     ofLogVerbose("ofxLitSphere", "fileName " + fileName);
     texture.load(fileName);
+
+    matName=fileName;
     
 }
 

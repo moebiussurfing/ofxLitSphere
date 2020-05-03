@@ -40,3 +40,10 @@ void ofApp::draw(){
 void ofApp::mousePressed(int x, int y, int button){
     litSphere.loadNext();
 }
+
+void ofApp::keyPressed(int key)
+{
+    if (key == ' ')
+        litSphere.loadNext();
+}
+

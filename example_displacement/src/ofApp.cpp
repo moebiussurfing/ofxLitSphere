@@ -8,8 +8,10 @@ void ofApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
     ofDisableArbTex();
     ofEnableDepthTest();
+
     ofSetVerticalSync(true);
-    
+    ofSetFrameRate(30);
+
     litSphere.setup();
     litSphere.loadAt(2);
 
@@ -47,9 +49,15 @@ void ofApp::draw(){
     ofScale(2, 2);
     ofBackgroundGradient(ofColor(180), ofColor(70), OF_GRADIENT_CIRCULAR);
     ofPopMatrix();
-    
+
+
     ofPushMatrix();
     ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
+
+
+    cam.begin();
+    cam.lookAt(glm::vec3(0,0,0));
+
 
     ofEnableAlphaBlending();
     ofEnableDepthTest();
@@ -73,7 +81,13 @@ void ofApp::draw(){
     
     ofDisableDepthTest();
     ofEnableAlphaBlending();
+
+
+    cam.end();
+
     ofPopMatrix();
+
+
     ofDrawBitmapString(". , change sourse", ofPoint(20, 20));
 }
 

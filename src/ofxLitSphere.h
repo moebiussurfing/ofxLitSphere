@@ -27,7 +27,13 @@ public:
     void reload();
     
     int getCurrent();
-    
+
+    string matName;
+    string getName()
+    {
+        return matName;
+    }
+
 protected:
     ofShader shader;
     ofDirectory dir;

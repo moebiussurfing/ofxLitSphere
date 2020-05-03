@@ -19,4 +19,6 @@ public:
     DisplacementSphereMesh displacement;
     ofMaterial material;
     ofLight light;
+
+    ofEasyCam cam;
 };
