@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetDataPathRoot("../../../../../data/");
+    //ofSetDataPathRoot("../../../../../data/");//put data outisde the project to share data folder between all example projects
     
     ofDisableArbTex();
     ofEnableDepthTest();

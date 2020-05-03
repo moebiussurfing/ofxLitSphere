@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    ofSetDataPathRoot("../../../../../data/");
+    //ofSetDataPathRoot("../../../../../data/");
     
     ofSetLogLevel(OF_LOG_VERBOSE);
     ofDisableArbTex();

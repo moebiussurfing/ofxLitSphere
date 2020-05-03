@@ -4,8 +4,7 @@
 
 ##-------------------------------
 data/MatCapZBrush/512.zip
-*/Libs/*
-*.png
+*/Lib__/*
 
 
 ## can exclude some sttings files
