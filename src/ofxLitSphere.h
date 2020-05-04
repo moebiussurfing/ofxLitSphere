@@ -35,11 +35,21 @@ public:
     int getCurrent();
 
 	string pathGlobal = "ofxLitSphere";
+	string pathFull;
 
     string matName;
     string getName()
     {
-        return matName;
+		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/";
+		auto _names = ofSplitString(matName, pathFull);
+		cout << "_names[1]: " << _names[1] << endl;
+		return _names[1];
+        //return matName;
+    } 
+	string getPath()
+    {
+		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/";
+        return pathFull;
     }
 
 protected:

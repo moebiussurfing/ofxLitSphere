@@ -3,6 +3,8 @@
 
 //--------------------------------------------------------------
 void ofxLitSphere::setup() {
+	ofDisableArbTex();
+
 	ofEnableNormalizedTexCoords();
 	ofDisableNormalizedTexCoords();
 	ofEnableAlphaBlending();
@@ -13,12 +15,17 @@ void ofxLitSphere::setup() {
 	loadNext();
 	loadPrevious();
 
+	ofEnableArbTex();
+
 #ifdef USE_FILE_BROWSER
 	setupGuiBroser();
 #endif
 }
 
+//--------------------------------------------------------------
 void ofxLitSphere::loadAt(int number) {
+	ofDisableArbTex();
+
 	string directory = pathGlobal + "/MatCapZBrush/Lib/";
 	dir.listDir(directory);
 
@@ -28,9 +35,14 @@ void ofxLitSphere::loadAt(int number) {
 	string fileName = dir.getPath(current);
 	ofLogVerbose("ofxLitSphere", "fileName " + fileName);
 	texture.load(fileName);
+
+	ofEnableArbTex();
 }
 
+//--------------------------------------------------------------
 void ofxLitSphere::loadNext() {
+	ofDisableArbTex();
+
 	string directory = pathGlobal + "/MatCapZBrush/Lib/";
 	dir.listDir(directory);
 
@@ -42,9 +54,14 @@ void ofxLitSphere::loadNext() {
 	texture.load(fileName);
 
 	matName = fileName;
+
+	ofEnableArbTex();
 }
 
+//--------------------------------------------------------------
 void ofxLitSphere::loadPrevious() {
+	ofDisableArbTex();
+
 	string directory = pathGlobal + "/MatCapZBrush/Lib/";
 	dir.listDir(directory);
 
@@ -57,26 +74,16 @@ void ofxLitSphere::loadPrevious() {
 
 	matName = fileName;
 
+	ofEnableArbTex();
 }
 
+//--------------------------------------------------------------
 int ofxLitSphere::getCurrent() {
 	return current;
 }
 
-//--------------------------------------------------------------
-void ofxLitSphere::update() {
-#ifdef USE_FILE_BROWSER
-	updateGuiBroser();
-#endif
-}
-//--------------------------------------------------------------
-void ofxLitSphere::draw() {
-#ifdef USE_FILE_BROWSER
-	if (bShowBrowser)
-		drawGuiBroser();
-#endif
-}
 
+//--------------------------------------------------------------
 void ofxLitSphere::begin() {
 	ofEnableNormalizedTexCoords();
 	ofEnableTextureEdgeHack();
@@ -84,12 +91,14 @@ void ofxLitSphere::begin() {
 	shader.setUniformTexture("litsphereTexture", texture, 1);
 }
 
+//--------------------------------------------------------------
 void ofxLitSphere::end() {
 	shader.end();
 	ofDisableNormalizedTexCoords();
 	ofDisableTextureEdgeHack();
 }
 
+//--------------------------------------------------------------
 void ofxLitSphere::reload() {
 	shader.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
 }
@@ -98,6 +107,24 @@ void ofxLitSphere::reload() {
 
 #ifdef USE_FILE_BROWSER
 
+//--------------------------------------------------------------
+void ofxLitSphere::update() {
+#ifdef USE_FILE_BROWSER
+	updateGuiBroser();
+#endif
+}
+
+
+//--------------------------------------------------------------
+void ofxLitSphere::draw() {
+#ifdef USE_FILE_BROWSER
+	if (bShowBrowser)
+		drawGuiBroser();
+#endif
+}
+
+
+//--------------------------------------------------------------
 void ofxLitSphere::dirRefresh() {
 
 	ofDirectory loadDir;
@@ -116,6 +143,7 @@ void ofxLitSphere::dirRefresh() {
 }
 
 
+//--------------------------------------------------------------
 void ofxLitSphere::setupGuiBroser() {
 
 	//gui.addFont("fonts\\Verdana.ttf");
@@ -166,6 +194,7 @@ void ofxLitSphere::setupGuiBroser() {
 
 	//ofLogNotice() << "textureSourceID: " << textureSourceID;
 }
+
 
 //--------------------------------------------------------------
 void ofxLitSphere::updateGuiBroser() {
