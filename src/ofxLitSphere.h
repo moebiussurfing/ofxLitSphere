@@ -16,8 +16,9 @@ public:
     //--------------------------------------------------------------
     void setup();
     
-    void loadAt(int number);
-    
+	void loadAt(int number);
+	void loadFilename(string name);
+
     void loadNext();
     
     void loadPrevious();
@@ -40,7 +41,7 @@ public:
     string matName;
     string getName()
     {
-		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/";
+		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/\\";
 		auto _names = ofSplitString(matName, pathFull);
 		cout << "_names[1]: " << _names[1] << endl;
 		return _names[1];

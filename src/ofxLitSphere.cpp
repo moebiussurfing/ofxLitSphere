@@ -23,6 +23,22 @@ void ofxLitSphere::setup() {
 }
 
 //--------------------------------------------------------------
+void ofxLitSphere::loadFilename(string name) {
+	ofDisableArbTex();
+
+	string fileName = pathGlobal + "/MatCapZBrush/Lib/"+name;
+
+	bool b = texture.load(fileName);
+	if (!b)
+	{
+		ofLogError("ofxLitSphere") << "Mat file not found! Load first located mat file.";
+		loadAt(0);
+	}
+
+	ofEnableArbTex();
+}
+
+//--------------------------------------------------------------
 void ofxLitSphere::loadAt(int number) {
 	ofDisableArbTex();
 
