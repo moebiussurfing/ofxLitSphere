@@ -5,7 +5,8 @@ class DisplacementSphereMesh {
 	
 public:
     
-    ofParameterGroup *settings;
+    //ofParameterGroup *settings;
+    ofParameterGroup params;
     ofParameter<float> details;
     ofParameter<float> displace;
     ofParameter<float> speed;
@@ -28,9 +29,17 @@ public:
     float *forces;
     
     ofSpherePrimitive sphere;
-    
+	//ofBoxPrimitive sphere;
+	//ofIcoSpherePrimitive sphere;
+
     void setup();
     void update();
     void draw(bool triagles = false,  bool type = false);
     void setNormals(ofMesh &mesh);
+	
+	float mod = 0;
+
+	void setMod(float f) {
+		mod = f;
+	}
 };

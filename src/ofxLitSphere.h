@@ -8,55 +8,55 @@
 #endif
 
 class ofxLitSphere {
-    
+
 public:
-    
-    ofImage texture;
-    
-    //--------------------------------------------------------------
-    void setup();
-    
+
+	ofImage texture;
+
+	//--------------------------------------------------------------
+	void setup();
+
 	void loadAt(int number);
 	void loadFilename(string name);
 
-    void loadNext();
-    
-    void loadPrevious();
-    
-    //--------------------------------------------------------------
-    void update();
+	void loadNext();
+
+	void loadPrevious();
+
+	//--------------------------------------------------------------
+	void update();
 	void draw();
-    
-    void begin();
-    
-    void end();
-    
-    void reload();
-    
-    int getCurrent();
+
+	void begin();
+
+	void end();
+
+	void reload();
+
+	int getCurrent();
 
 	string pathGlobal = "ofxLitSphere";
 	string pathFull;
 
-    string matName;
-    string getName()
-    {
+	string matName;
+	string getName()
+	{
 		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/\\";
 		auto _names = ofSplitString(matName, pathFull);
-		cout << "_names[1]: " << _names[1] << endl;
+		ofLogNotice() << __FUNCTION__ << "_names[1]: " << _names[1];
 		return _names[1];
-        //return matName;
-    } 
+		//return matName;
+	}
 	string getPath()
-    {
+	{
 		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/";
-        return pathFull;
-    }
+		return pathFull;
+	}
 
 protected:
-    ofShader shader;
-    ofDirectory dir;
-    int current;
+	ofShader shader;
+	ofDirectory dir;
+	int current;
 
 #ifdef USE_FILE_BROWSER
 
@@ -66,7 +66,7 @@ public:
 
 public:
 	string mapCapName;
-	
+
 	string inputPath;
 	bool bShowGuiBroser = false;
 	bool bShowBrowser = true;
@@ -101,6 +101,6 @@ private:
 	GLuint imageButtonID;
 
 	void keyPressed(int key);
-	#endif
+#endif
 
 };

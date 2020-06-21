@@ -6,11 +6,11 @@ void ofApp::setup(){
     //ofSetDataPathRoot("../../../../../data/");
     
     ofSetLogLevel(OF_LOG_VERBOSE);
-    ofDisableArbTex();
-    ofEnableDepthTest();
+    //ofDisableArbTex();
+    //ofEnableDepthTest();
 
     ofSetVerticalSync(true);
-    ofSetFrameRate(30);
+    ofSetFrameRate(60);
 
     litSphere.setup();
     litSphere.loadAt(2);
@@ -32,63 +32,78 @@ void ofApp::setup(){
     material.setSpecularColor(ofColor(150));
     material.setEmissiveColor(ofFloatColor(10.0));
     material.setShininess(0.8);
+
+	gui.setup();
+	gui.add(mod.set("mod", 0, 0, 1));
+	gui.add(bmat1.set("mat1",true));
+	gui.add(bmat2.set("mat2",false));
+	gui.add(mat1.set("mat1", 0, 0, 20));
+	gui.add(mat2.set("mat2", 0, 0, 20));
+	gui.add(displacement.params);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	displacement.setMod(mod);
     displacement.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    ofSetColor(255);
-    
-    ofClear(0);
-    ofPushMatrix();
-    ofScale(2, 2);
-    ofBackgroundGradient(ofColor(180), ofColor(70), OF_GRADIENT_CIRCULAR);
-    ofPopMatrix();
+	ofEnableDepthTest();
 
-
-    ofPushMatrix();
-    ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
-
-
+    //ofClear(0);
+    //ofPushMatrix();
+    //ofScale(2, 2);
+    //ofBackgroundGradient(ofColor(180), ofColor(70), OF_GRADIENT_CIRCULAR);
+    //ofPopMatrix();
+	
     cam.begin();
     cam.lookAt(glm::vec3(0,0,0));
 
-
-    ofEnableAlphaBlending();
-    ofEnableDepthTest();
-    ofDisableNormalizedTexCoords();
+	//ofEnableAlphaBlending();
+    //ofEnableDepthTest();
+    //ofDisableNormalizedTexCoords();
     
-    light.enable();
+    //light.enable();
 
     // first
-    litSphere.begin();
-        displacement.draw();
-    litSphere.end();
+	if (bmat1) {
+		litSphere.begin();
+		displacement.draw();
+		litSphere.end();
+	}
 
     // second
-    litSphere02.begin();
-        glPushMatrix();
-        ofDrawSphere(0, 0, 180);
-        ofPopMatrix();
-    litSphere02.end();
-//
-//    light.disable();
-    
-    ofDisableDepthTest();
-    ofEnableAlphaBlending();
+	if (bmat2) {
+		litSphere02.begin();
+		//glPushMatrix();
+		ofDrawSphere(0, 0, 180);
+		//ofPopMatrix();
+		litSphere02.end();
+	}
 
+    //light.disable();    
+
+    //light.disable();
 
     cam.end();
 
-    ofPopMatrix();
+    //ofPopMatrix();
 
+	//ofDisableDepthTest();
+    //ofEnableAlphaBlending();
 
+	//-
+
+	ofEnableArbTex();
+
+	ofDisableDepthTest();
+	ofSetColor(255);
     ofDrawBitmapString(". , change sourse", ofPoint(20, 20));
+
+	gui.draw();
 }
 
 //--------------------------------------------------------------

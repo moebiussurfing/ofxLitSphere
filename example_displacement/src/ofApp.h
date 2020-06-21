@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxLitSphere.h"
+#include "ofxGui.h"
 #include "DisplacementSphereMesh.h"
 
 class ofApp : public ofBaseApp{
@@ -21,4 +22,14 @@ public:
     ofLight light;
 
     ofEasyCam cam;
+
+	ofxPanel gui;
+
+	ofParameter<bool> bmat1;
+	ofParameter<bool> bmat2;
+	ofParameter<int> mat1;
+	ofParameter<int> mat2;
+	
+	ofParameter<float> mod;
+
 };

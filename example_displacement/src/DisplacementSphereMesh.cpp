@@ -2,15 +2,26 @@
 
 void DisplacementSphereMesh::setup() {
     
-    settings = new ofParameterGroup();
-    settings->setName("displacement");
-    settings->add(details.set("details", 0.06, 0 ,1));
-    settings->add(displace.set("displace", 0.8, 0, 1));
-    settings->add(speed.set("speed", 0.1, 0 ,1));
+    //settings = new ofParameterGroup();
+    //settings->setName("displacement");
+    //settings->add(details.set("details", 0.06, 0 ,1));
+    //settings->add(displace.set("displace", 0.8, 0, 1));
+    //settings->add(speed.set("speed", 0.1, 0 ,1));
+	params.setName("displacement");
+    params.add(details.set("details", 0.06, 0 ,1));
+    params.add(displace.set("displace", 0.8, 0, 1));
+    params.add(speed.set("speed", 0.1, 0 ,1));
     
     sphere.setRadius(150);
-    sphere.setResolution(96);
+    sphere.setResolution(40);
+    //sphere.setResolution(96);
+
+	//box
+	//sphere.set(150);
+	//sphere.setResolution(40);
+
     mainMesh = sphere.getMesh();
+
     depths = new float[sphere.getMesh().getNumVertices()];
     speeds = new float[sphere.getMesh().getNumVertices()];
     forces = new float[sphere.getMesh().getNumVertices()];
@@ -19,6 +30,7 @@ void DisplacementSphereMesh::setup() {
         speeds[i] = 0;
         forces[i] = 0;
     }
+
 }
 
 void DisplacementSphereMesh::update()  {
@@ -28,7 +40,8 @@ void DisplacementSphereMesh::update()  {
         ofVec3f v = mainMesh.getVertex(i);
         float d = ofNoise(v.x * details * 0.1, v.y * details * 0.1, time) * displace * 100.0;
         //displace += 10.0 * ofNoise(v.x * 0.01, v.y * 0.01, time * .3);
-        v = v + mainMesh.getNormal(i) * d;
+        //v = v + mainMesh.getNormal(i) * d;
+        v = v + mainMesh.getNormal(i) * d * mod;
         mainMesh.setVertex(i, v);
     }
     setNormals(mainMesh);
