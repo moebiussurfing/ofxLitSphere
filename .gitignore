@@ -3,9 +3,6 @@
 #########################
 
 ##-------------------------------
-data/MatCapZBrush/512.zip
-*/Lib__/*
-
 
 ## can exclude some sttings files
 
@@ -52,6 +49,7 @@ icon.rc
 *.sln
 *.filters
 *.user
+*.exp
 
 #vs2017
 *.sln
@@ -552,17 +550,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-*.exp
-*.xcconfig
-*.plist
-2_example_ofxSceneTEST3D_seq/Makefile
-*.make
-2_example_ofxSceneTEST3D/bin/data/ofxPresetsManager/presets/PRESET_preset_0.xml
-2_example_ofxSceneTEST3D/bin/data/ofxPresetsManager/presets/PRESET_preset_1.xml
-2_example_ofxSceneTEST3D/bin/data/ofxPresetsManager/presets/PRESET_preset_2.xml
-2_example_ofxSceneTEST3D/bin/data/ofxPresetsManager/presets/PRESET_preset_5.xml
-2_example_ofxSceneTEST3D/bin/data/ofxPresetsManager/presets/PRESET_preset_6.xml
-2_example_ofxSceneTEST3D/bin/data/ofxPresetsManager/presets/PRESET_preset_7.xml
-2_example_ofxSceneTEST3D/bin/data/ofxPresetsManager/settings/control.xml
-2_example_ofxSceneTEST3D/bin/data/settings_Control.xml
-2_example_ofxSceneTEST3D/bin/data/settings_Preset.xml
