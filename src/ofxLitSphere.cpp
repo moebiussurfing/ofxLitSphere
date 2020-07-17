@@ -18,7 +18,9 @@ void ofxLitSphere::setup() {
 	ofEnableArbTex();
 
 #ifdef USE_FILE_BROWSER
-	setupGuiBroser();
+	bShowGui = true;
+	bAutoResize = true;
+	setupGui();
 #endif
 }
 
@@ -26,12 +28,12 @@ void ofxLitSphere::setup() {
 void ofxLitSphere::loadFilename(string name) {
 	ofDisableArbTex();
 
-	string fileName = pathGlobal + "/MatCapZBrush/Lib/"+name;
+	string fileName = pathGlobal + "/MatCapZBrush/Lib/" + name;
 
-	bool b = texture.load(fileName);
+	bool b = mapTexture.load(fileName);
 	if (!b)
 	{
-		ofLogError("ofxLitSphere") << "Mat file not found! Load first located mat file.";
+		ofLogError(__FUNCTION__) << "Mat file not found! Load first located mat file.";
 		loadAt(0);
 	}
 
@@ -49,8 +51,8 @@ void ofxLitSphere::loadAt(int number) {
 	if (dir.size() <= current) current = 0;
 
 	string fileName = dir.getPath(current);
-	ofLogVerbose("ofxLitSphere", "fileName " + fileName);
-	texture.load(fileName);
+	ofLogNotice(__FUNCTION__) << "fileName " + fileName;
+	mapTexture.load(fileName);
 
 	ofEnableArbTex();
 }
@@ -64,10 +66,10 @@ void ofxLitSphere::loadNext() {
 
 	current++;
 	if (dir.size() <= current) current = 0;
-
 	string fileName = dir.getPath(current);
-	ofLogVerbose("ofxLitSphere", "fileName " + fileName);
-	texture.load(fileName);
+
+	ofLogNotice(__FUNCTION__) << "fileName " + fileName;
+	mapTexture.load(fileName);
 
 	matName = fileName;
 
@@ -85,8 +87,8 @@ void ofxLitSphere::loadPrevious() {
 	if (current < 0) current = dir.size() - 1;
 
 	string fileName = dir.getPath(current);
-	ofLogVerbose("ofxLitSphere", "fileName " + fileName);
-	texture.load(fileName);
+	ofLogNotice(__FUNCTION__) << "fileName " + fileName;
+	mapTexture.load(fileName);
 
 	matName = fileName;
 
@@ -104,7 +106,7 @@ void ofxLitSphere::begin() {
 	ofEnableNormalizedTexCoords();
 	ofEnableTextureEdgeHack();
 	shader.begin();
-	shader.setUniformTexture("litsphereTexture", texture, 1);
+	shader.setUniformTexture("litsphereTexture", mapTexture, 1);
 }
 
 //--------------------------------------------------------------
@@ -126,211 +128,206 @@ void ofxLitSphere::reload() {
 //--------------------------------------------------------------
 void ofxLitSphere::update() {
 #ifdef USE_FILE_BROWSER
-	updateGuiBroser();
+	updateGui();
 #endif
 }
 
 
 //--------------------------------------------------------------
-void ofxLitSphere::draw() {
+void ofxLitSphere::drawGui() {
 #ifdef USE_FILE_BROWSER
-	if (bShowBrowser)
-		drawGuiBroser();
+	if (bShowBrowser && bShowGui) {
+		//draw_ImGui();
+
+		//ImGui::SetNextWindowSize(ofVec2f(400, 100), ImGuiCond_FirstUseEver);
+
+		gui_ImGui.begin();
+		{
+			draw_ImGui(10, 10, 300, 800, 6);//window position, size, amount of thumbs per row
+		}
+		gui_ImGui.end();
+	}
 #endif
 }
 
+////--------------------------------------------------------------
+//void ofxLitSphere::dirRefresh() {
+//	//TODO:
+//	ofDirectory loadDir;
+//	string dataPath = "F:\\openFrameworks\\addons\\ofxLitSphere\\example_Browser\\bin\\data\\";
+//	string pathFull = dataPath + inputPath;
+//	ofLogNotice(__FUNCTION__) << pathFull;
+//	loadDir.open(pathFull);
+//	loadDir.allowExt("jpg");
+//	loadDir.allowExt("png");
+//
+//	imgNamesForListBox.clear();
+//	for (auto im : loadDir) {
+//		imgNamesForListBox.emplace_back(im.getFileName());
+//	}
+//}
 
 //--------------------------------------------------------------
-void ofxLitSphere::dirRefresh() {
-
-	ofDirectory loadDir;
-	//TODO:
-	string dataPath = "F:\\openFrameworks\\addons\\ofxLitSphere\\example_Browser\\bin\\data\\";
-	string pathFull = dataPath + inputPath;
-	ofLog() << pathFull;
-	loadDir.open(pathFull);
-	loadDir.allowExt("jpg");
-	loadDir.allowExt("png");
-
-	imgNamesForListBox.clear();
-	for (auto im : loadDir) {
-		imgNamesForListBox.emplace_back(im.getFileName());
-	}
-}
-
-
-//--------------------------------------------------------------
-void ofxLitSphere::setupGuiBroser() {
+void ofxLitSphere::setupGui() {
 
 	//gui.addFont("fonts\\Verdana.ttf");
-	guiBrowser.setup();
+	gui_ImGui.setup();
 
+	//theme
+	ModernDarkTheme();
 
 	//inputPath = ofFilePath::getAbsolutePath("input");
 	//ofStringReplace(inputPath, "/", "\\");
 
-#define WIDTH 256
-#define HEIGHT 256
-
-	inputPath = "ofxLitSphere/MatCapZBrush/Lib/";
+	ImGui::GetIO().MouseDrawCursor = false;
 
 	//dirRefresh();
 
-	//inputFilename = "1D3FCC_051B5F_81A0F2_5579E9-512px.png";
-	inputFilename = "944_large_remake2.jpg";
-	//inputFilename = "myredmetal_zbrush_matcap_by_digitalinkrod.jpg";
+	//-
 
+	//populate thumbs
+	inputPath = "ofxLitSphere/MatCapZBrush/Lib/";
 
+	string directory = pathGlobal + "/MatCapZBrush/Lib/";
+	dirThumbs.listDir(directory);
+	dirThumbs.allowExt("png");
+	dirThumbs.allowExt("PNG");
+	dirThumbs.allowExt("jpg");
+	dirThumbs.allowExt("JPG");
 
-	//load your own ofImage
-	string str = inputPath + inputFilename;
-	ofLogNotice() << str;
+	textureSource.clear();
+	textureSource.resize(dirThumbs.size());
+	textureSourceID.clear();
+	textureSourceID.resize(dirThumbs.size());
 
-	imageButtonSource.load(str);
-	imageButtonID = guiBrowser.loadImage(imageButtonSource);
-
-	ofLog() << "imageButtonID: " << imageButtonID;
-
-	////or have the loading done for you if you don't need the ofImage reference
-	//imageButtonID = gui.loadImage("of.png");
-
-	////can also use ofPixels in same manner
-	//ofLoadImage(pixelsButtonSource, inputPath + inputFilename);
-	//pixelsButtonID = guiBrowser.loadPixels(pixelsButtonSource);
-
-	////and alt method
-	////pixelsButtonID = guiBrowser.loadPixels("of_upside_down.png");
-
-	////pass in your own texture reference if you want to keep it
-	//textureSourceID = guiBrowser.loadTexture(textureSource, inputPath + inputFilename);
-
-	//or just pass a path
-	//textureSourceID = guiBrowser.loadTexture("of_upside_down.png");
-
-
-	//ofLogNotice() << "textureSourceID: " << textureSourceID;
-}
-
-
-//--------------------------------------------------------------
-void ofxLitSphere::updateGuiBroser() {
-
-	//fbo.begin();
-	//ofClear(0, 0, 0, 0);
-	//tex.draw(5, 5);
-	//fbo.end();
-
-}
-
-
-//--------------------------------------------------------------
-void ofxLitSphere::drawGuiBroser() {
-	ofSetColor(255);
-
-	if (imgMain.isAllocated()) {
-		imgMain.draw(0, 0);
+	for (int i = 0; i < dirThumbs.size(); i++) {
+		textureSourceID[i] = gui_ImGui.loadTexture(textureSource[i], dirThumbs.getPath(i));
 	}
-
-	guiBrowser.begin();
-	drawGuiBrowser(400, 20, 600, 600);
-	guiBrowser.end();
-
-
 }
 
 //--------------------------------------------------------------
-void ofxLitSphere::drawGuiBrowser(int x, int y, int w, int h) {
+void ofxLitSphere::updateGui() {
+}
+
+////--------------------------------------------------------------
+//void ofxLitSphere::draw_ImGui() {
+//
+//	ImGui::SetNextWindowSize(ofVec2f(400, 100), ImGuiCond_FirstUseEver);
+//
+//	gui_ImGui.begin();
+//	{
+//		draw_ImGui(10, 10, 150, 800);//position and size
+//	}
+//	gui_ImGui.end();
+//}
+
+//--------------------------------------------------------------
+void ofxLitSphere::draw_ImGui(int x, int y, int w, int h, int amntPerRow) {
 
 	bool guishow = true;
 
-	ImGui::Begin("img viewer");
+	//thumb size
+	float tw, th;
+	//tw = th = 100;
+	//tw = th = ImGui::GetWindowWidth();
 
-	//GetImTextureID is a static function define in Helpers.h that accepts ofTexture, ofImage, or GLuint
-	if (ImGui::ImageButton(GetImTextureID(imageButtonID), ImVec2(200, 200)))
-	{
-		ofLog() << "PRESSED";
+	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
+
+	if (!bAutoResize) {
+		w = w / (float)(amntPerRow - 1);
+		tw = th = w * 0.85;
+	}
+	else {
+		tw = th = w / (float)(amntPerRow - 1);
 	}
 
+
+
+	ImGui::Begin("MAPCAP");
+	{
+		for (int i = 0; i < dirThumbs.size(); i++) {
+
+			if (ImGui::ImageButton(GetImTextureID(textureSourceID[i]), ImVec2(tw, th)))
+			{
+				ofLogNotice(__FUNCTION__) << "[ " + ofToString(i) + " ] THUMB : " + dirThumbs.getName(i);
+
+				indexBrowser = i;
+				loadAt(indexBrowser);
+
+				mapCapName = "[" + ofToString(getCurrent()) + "] " + getName();
+			}
+
+			if (i < amntPerRow-2)	ImGui::SameLine();
+			else {
+				if (i % amntPerRow != 0) ImGui::SameLine();
+			}
+		}
+	}
 	ImGui::End();
 
-	////fbo
-	//ImGui::Begin("Albedo", &guishow, 0);
-	//ImGui::ImageButton((ImTextureID)(uintptr_t)fbo.getTexture(0).getTextureData().textureID, ImVec2(300, 300));
-	//ImGui::End();
+	/*
+		//if (ImGui::Selectable(tempStrStream.str().c_str())) {
+		//	ofFileDialogResult result = ofSystemLoadDialog("select input folder", true);
+		//	if (result.bSuccess) {
+		//		inputPath = result.getPath();
+
+		//		ofDirectory loadDir;
+		//		loadDir.open(inputPath);
+		//		loadDir.allowExt("jpg");
+		//		loadDir.allowExt("png");
+
+		//		imgNamesForListBox.clear();
+		//		for (auto im : loadDir) {
+		//			imgNamesForListBox.emplace_back(im.getFileName());
+		//		}
+		//	}
+		//}
+
+		//if (imgNamesForListBox.size() > 0) {
+		//	ImGui::Text(("Nr of files: " + ofToString(imgNamesForListBox.size())).c_str());
+		//}
+
+		//ImGui::PushItemWidth(200);
+		////ImGui::ListBox("##imgfiles", &indexImgFile, imgNamesForListBox, 10);
+		//ofxImGui::VectorListBox("##imgfiles", &indexImgFile, imgNamesForListBox);
+		//if (indexImgFile >= 0) {
+		//	if (indexImgFile != prevIndexImgFile) {
+		//		string str = inputPath + "/" + imgNamesForListBox[indexImgFile];
+
+		//		imgMain.loadImage(inputPath + "/" + imgNamesForListBox[indexImgFile]);
 
 
-	//ofFill(); // It needs to be if previously was called ofNoFill
-	//ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
-	//ImGui::Begin("img viewer");
-	//tempStrStream.str(std::string());
-	//tempStrStream << "input path: " << inputPath;
+		//		////fbo
+		//		//ofLoadImage(tex, str);
 
+		//		prevIndexImgFile = indexImgFile;
 
+		//		stringstream ss;
+		//		ss << "name:" << imgNamesForListBox[indexImgFile] << endl;
+		//		ss << "size:" << imgMain.getWidth() << "," << imgMain.getHeight() << endl;
+		//		imgDescr = ss.str();
+		//	}
+		//}
 
-	//if (ImGui::Selectable(tempStrStream.str().c_str())) {
-	//	ofFileDialogResult result = ofSystemLoadDialog("select input folder", true);
-	//	if (result.bSuccess) {
-	//		inputPath = result.getPath();
-
-	//		ofDirectory loadDir;
-	//		loadDir.open(inputPath);
-	//		loadDir.allowExt("jpg");
-	//		loadDir.allowExt("png");
-
-	//		imgNamesForListBox.clear();
-	//		for (auto im : loadDir) {
-	//			imgNamesForListBox.emplace_back(im.getFileName());
-	//		}
-	//	}
-	//}
-
-	//if (imgNamesForListBox.size() > 0) {
-	//	ImGui::Text(("Nr of files: " + ofToString(imgNamesForListBox.size())).c_str());
-	//}
-
-	//ImGui::PushItemWidth(200);
-	////ImGui::ListBox("##imgfiles", &indexImgFile, imgNamesForListBox, 10);
-	//ofxImGui::VectorListBox("##imgfiles", &indexImgFile, imgNamesForListBox);
-	//if (indexImgFile >= 0) {
-	//	if (indexImgFile != prevIndexImgFile) {
-	//		string str = inputPath + "/" + imgNamesForListBox[indexImgFile];
-
-	//		imgMain.loadImage(inputPath + "/" + imgNamesForListBox[indexImgFile]);
-
-
-	//		////fbo
-	//		//ofLoadImage(tex, str);
-
-	//		prevIndexImgFile = indexImgFile;
-
-	//		stringstream ss;
-	//		ss << "name:" << imgNamesForListBox[indexImgFile] << endl;
-	//		ss << "size:" << imgMain.getWidth() << "," << imgMain.getHeight() << endl;
-	//		imgDescr = ss.str();
-	//	}
-	//}
-
-	//ImGui::PopItemWidth();
-	//ImGui::SameLine(); ImGui::Text(imgDescr.c_str());
-	//ImGui::End();
+		//ImGui::PopItemWidth();
+		//ImGui::SameLine(); ImGui::Text(imgDescr.c_str());
+		//ImGui::End();
+	*/
 }
-
 
 //--------------------------------------------------------------
 void ofxLitSphere::keyPressed(int key) {
-
-
 	if (key == OF_KEY_DOWN)
 	{
 		loadPrevious();
 		mapCapName = "[" + ofToString(getCurrent()) + "] " + getName();
 	}
-	if (key == OF_KEY_UP)
+	else if (key == OF_KEY_UP)
 	{
 		loadNext();
 		mapCapName = "[" + ofToString(getCurrent()) + "] " + getName();
 	}
-
 }
 
 #endif

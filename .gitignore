@@ -6,6 +6,12 @@
 
 ## can exclude some sttings files
 
+*.ini
+*.png
+*.PNG
+*.jpg
+*.JPG
+
 #*.XML
 #*.xml
 #*.JSON
@@ -550,3 +556,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+*.jpg
+*.png
