@@ -6,7 +6,7 @@
 
 ## can exclude some sttings files
 
-*.ini
+#*.ini
 #*.png
 #*.PNG
 #*.jpg
@@ -17,10 +17,10 @@
 #*.JSON
 #*.json
 
-*/bin/*.jpg
-*/bin/*.JPG
-*/bin/*.png
-*/bin/*.PNG
+#*/bin/*.jpg
+#*/bin/*.JPG
+#*/bin/*.png
+#*/bin/*.PNG
 
 #!*/bin/data/
 #[Bb]in/
