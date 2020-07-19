@@ -21,9 +21,16 @@ https://github.com/nidorx/matcaps/tree/v1.0/512 -> `OF\addons\ofxLitSphere\examp
 https://github.com/nidorx/matcaps/tree/v1.0/preview -> `OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\previews`
 ![Alt text](readme_images/dataFiles2.PNG?raw=true "dataFiles2")  
 
+### Dependecies:  
+https://github.com/jvcleave/ofxImGui
+
 ### Thanks to:   
 https://github.com/alexeyroudenko -> for the main `OF addon`  
 https://github.com/nidorx -> for the cap files bundle  
+
+### Tested System:  
+OF 0.11 / Windows10 / VS2017
+
 
 ### TODO:
 - Clean a bit the repository. Kind of work in progress yet...
