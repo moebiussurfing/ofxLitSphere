@@ -1,12 +1,12 @@
 ofxLitSphere
 =============================
 
-## Notes by @moebiusSrufing:
+## Notes by @moebiusSurfing:
 
-**This is a fork that pretends to add**  
+**This is a fork that pretends to add:**  
 
 - A helper ready-to-use engine to browse cap files and preview thumbnails.  
-- A nice packed kit of the awesome **matcaps** files from @nidorx:  
+- A nice packed kit of the awesome **matcaps** files from **@nidorx**:  
 https://github.com/nidorx/matcaps
 
 ![Alt text](readme_images/screenshot1.PNG?raw=true "screenshot1")  
@@ -31,15 +31,22 @@ thumbnail goes to `/preview` and the cap file into `\Lib`. (Two files per preset
 https://github.com/jvcleave/ofxImGui
 
 ### Thanks to:   
-https://github.com/alexeyroudenko -> for the main `OF addon`  
-https://github.com/nidorx -> for the cap files bundle  
+https://github.com/alexeyroudenko -> for the main `OF addon`. Thanks **@alexeyroudenko**!  
+https://github.com/nidorx -> for the cap files bundle. Thanks **@nidorx**! 
 
 ### Tested System:  
-OF 0.11 / Windows10 / VS2017
-
+**OF 0.11 / Windows10 / VS2017**
 
 ### TODO:
-- Clean a bit the repository. Kind of work in progress yet...  
+- Clean a bit the repository. Kind of work-in-progress yet...  
+- Delete all `png` cap files to free space and rebuild `.gitignore` (**Sorry for this!**)
+
+### Some links about **MatCap**:  
+
+https://learn.foundry.com/modo/content/help/pages/shading_lighting/shader_items/matcap.html  
+https://medium.com/@cyrilltoboe/world-space-matcap-shading-1d8f2a0ee296  
+https://medium.com/playkids-tech-blog/matcap-render-art-pipeline-optimization-for-mobile-devices-4e1a520b9f1a  
+https://pixologic.com/zbrush/downloadcenter/library/
 
 --------------------------------------------------------------------------------
 
