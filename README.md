@@ -6,7 +6,7 @@ ofxLitSphere
 **This is a fork that pretends to add:**  
 
 - A helper ready-to-use engine to browse cap files and preview thumbnails.  
-- A nice packed kit of the awesome **matcaps** files from **@nidorx**:  
+- **/example_Browser**: A nice packed kit of the awesome **matcaps** files from **@nidorx**:  
 https://github.com/nidorx/matcaps
 
 ![Alt text](readme_images/screenshot1.PNG?raw=true "screenshot1")  
