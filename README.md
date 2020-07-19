@@ -23,6 +23,10 @@ https://github.com/nidorx/matcaps/tree/v1.0/preview ->
 `OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\previews`
 ![Alt text](readme_images/dataFiles2.PNG?raw=true "dataFiles2")  
 
+Both folders must have the same number of files:  
+thumbnail goes to `/preview` and the cap file into `\Lib`. (Two files per preset)
+
+
 ### Dependecies:  
 https://github.com/jvcleave/ofxImGui
 
@@ -35,7 +39,7 @@ OF 0.11 / Windows10 / VS2017
 
 
 ### TODO:
-- Clean a bit the repository. Kind of work in progress yet...
+- Clean a bit the repository. Kind of work in progress yet...  
 
 --------------------------------------------------------------------------------
 
