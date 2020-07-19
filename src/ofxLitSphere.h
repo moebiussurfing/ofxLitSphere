@@ -5,10 +5,9 @@
 
 ///	TODO:
 ///		+ save/load settings by name
-///		+ add text arb push/pop
+///		+ add text arb push/pop to avoid collide with other addons render
 ///		+ clean code
-///		+ customize path
-///		+ previews with differents files? 3d head preview
+///		+ customizable global path. also out of /data to share map-cap files with other apps
 
 
 #define USE_FILE_BROWSER
@@ -34,14 +33,14 @@ public:
 
 public:
 	void setup();
+
 #ifdef USE_FILE_BROWSER
 	void update();
 	void drawGui();
-
 	int indexBrowser = -1;
-	bool bAutoResize;
-
+	bool bAutoResize;//TODO:
 #endif
+
 	void keyPressed(int key);
 
 private:
@@ -96,25 +95,13 @@ private:
 	void setupGui();
 	void updateGui();
 
-	//void draw_ImGui();
-	void draw_ImGui(int x, int y, int w, int h, int amntPerRow = 1);
 	ofxImGui::Gui gui_ImGui;
-	//string inputPath;
-
-//public:
-//	void dirRefresh();
-	//string imgDescr = "";
-	//vector<string> imgNamesForListBox;
-	//stringstream tempStrStream;
-	//int indexImgFile = -1;
-	//int prevIndexImgFile = -1;
-	//string inputFilename;
+	void draw_ImGui(int x, int y, int w, int h, int amntPerRow = 1);
 
 private:
 	ofDirectory dirThumbs;
 	vector<ofTexture> textureSource;
 	vector<GLuint> textureSourceID;
-#endif
 
 	//--
 
@@ -130,10 +117,8 @@ private:
 		style.TabRounding = 2;
 		style.WindowRounding = 0;
 		style.FramePadding = { 4, 4 };
-
 		style.WindowTitleAlign = { 0.0, 0.5 };
 		style.ColorButtonPosition = ImGuiDir_Left;
-
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_Text] = { 1.0f, 1.0f, 1.0f, 1.00f };				//
 		colors[ImGuiCol_TextDisabled] = { 0.25f, 0.25f, 0.25f, 1.00f };		//
@@ -184,4 +169,5 @@ private:
 		colors[ImGuiCol_NavWindowingDimBg] = { 0.80f, 0.80f, 0.80f, 0.20f };
 		colors[ImGuiCol_ModalWindowDimBg] = { 0.11f, 0.13f, 0.13f, 0.35f };
 	}
+	#endif
 };

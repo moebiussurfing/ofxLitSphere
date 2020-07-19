@@ -13,7 +13,7 @@ void ofxLitSphere::setup() {
 
 	shader.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
 	
-	//workaround refresh 
+	//workaround to startup refresh 
 	loadNext();
 	loadPrevious();
 
@@ -153,23 +153,6 @@ void ofxLitSphere::drawGui() {
 #endif
 }
 
-////--------------------------------------------------------------
-//void ofxLitSphere::dirRefresh() {
-//	//TODO:
-//	ofDirectory loadDir;
-//	string dataPath = "F:\\openFrameworks\\addons\\ofxLitSphere\\example_Browser\\bin\\data\\";
-//	string pathFull = dataPath + inputPath;
-//	ofLogNotice(__FUNCTION__) << pathFull;
-//	loadDir.open(pathFull);
-//	loadDir.allowExt("jpg");
-//	loadDir.allowExt("png");
-//
-//	imgNamesForListBox.clear();
-//	for (auto im : loadDir) {
-//		imgNamesForListBox.emplace_back(im.getFileName());
-//	}
-//}
-
 //--------------------------------------------------------------
 void ofxLitSphere::setupGui() {
 
@@ -213,18 +196,6 @@ void ofxLitSphere::setupGui() {
 void ofxLitSphere::updateGui() {
 }
 
-////--------------------------------------------------------------
-//void ofxLitSphere::draw_ImGui() {
-//
-//	ImGui::SetNextWindowSize(ofVec2f(400, 100), ImGuiCond_FirstUseEver);
-//
-//	gui_ImGui.begin();
-//	{
-//		draw_ImGui(10, 10, 150, 800);//position and size
-//	}
-//	gui_ImGui.end();
-//}
-
 //--------------------------------------------------------------
 void ofxLitSphere::draw_ImGui(int x, int y, int w, int h, int amntPerRow) {
 
@@ -246,10 +217,9 @@ void ofxLitSphere::draw_ImGui(int x, int y, int w, int h, int amntPerRow) {
 		tw = th = w / (float)(amntPerRow - 1);
 	}
 
-
-
-	ImGui::Begin("MAPCAP");
+	ImGui::Begin("MAP-CAP");
 	{
+		//TODO:
 		//mark border on selected
 		ImGuiStyle *style = &ImGui::GetStyle();
 		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];//better for my theme
@@ -291,55 +261,6 @@ void ofxLitSphere::draw_ImGui(int x, int y, int w, int h, int amntPerRow) {
 		}
 	}
 	ImGui::End();
-
-	/*
-		//if (ImGui::Selectable(tempStrStream.str().c_str())) {
-		//	ofFileDialogResult result = ofSystemLoadDialog("select input folder", true);
-		//	if (result.bSuccess) {
-		//		inputPath = result.getPath();
-
-		//		ofDirectory loadDir;
-		//		loadDir.open(inputPath);
-		//		loadDir.allowExt("jpg");
-		//		loadDir.allowExt("png");
-
-		//		imgNamesForListBox.clear();
-		//		for (auto im : loadDir) {
-		//			imgNamesForListBox.emplace_back(im.getFileName());
-		//		}
-		//	}
-		//}
-
-		//if (imgNamesForListBox.size() > 0) {
-		//	ImGui::Text(("Nr of files: " + ofToString(imgNamesForListBox.size())).c_str());
-		//}
-
-		//ImGui::PushItemWidth(200);
-		////ImGui::ListBox("##imgfiles", &indexImgFile, imgNamesForListBox, 10);
-		//ofxImGui::VectorListBox("##imgfiles", &indexImgFile, imgNamesForListBox);
-		//if (indexImgFile >= 0) {
-		//	if (indexImgFile != prevIndexImgFile) {
-		//		string str = inputPath + "/" + imgNamesForListBox[indexImgFile];
-
-		//		imgMain.loadImage(inputPath + "/" + imgNamesForListBox[indexImgFile]);
-
-
-		//		////fbo
-		//		//ofLoadImage(tex, str);
-
-		//		prevIndexImgFile = indexImgFile;
-
-		//		stringstream ss;
-		//		ss << "name:" << imgNamesForListBox[indexImgFile] << endl;
-		//		ss << "size:" << imgMain.getWidth() << "," << imgMain.getHeight() << endl;
-		//		imgDescr = ss.str();
-		//	}
-		//}
-
-		//ImGui::PopItemWidth();
-		//ImGui::SameLine(); ImGui::Text(imgDescr.c_str());
-		//ImGui::End();
-	*/
 }
 
 //--------------------------------------------------------------
