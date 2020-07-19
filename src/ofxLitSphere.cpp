@@ -12,6 +12,8 @@ void ofxLitSphere::setup() {
 	current = 0;
 
 	shader.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
+	
+	//workaround refresh 
 	loadNext();
 	loadPrevious();
 
@@ -143,7 +145,8 @@ void ofxLitSphere::drawGui() {
 
 		gui_ImGui.begin();
 		{
-			draw_ImGui(10, 10, 300, 800, 6);//window position, size, amount of thumbs per row
+			draw_ImGui(10, 10, 300, 800, 3);//window position, size, amount of thumbs per row
+			//draw_ImGui(10, 10, 300, 800, 6);//window position, size, amount of thumbs per row
 		}
 		gui_ImGui.end();
 	}
@@ -188,7 +191,8 @@ void ofxLitSphere::setupGui() {
 	//populate thumbs
 	inputPath = "ofxLitSphere/MatCapZBrush/Lib/";
 
-	string directory = pathGlobal + "/MatCapZBrush/Lib/";
+	string directory = pathGlobal + "/MatCapZBrush/previews/";
+	//string directory = pathGlobal + "/MatCapZBrush/Lib/";
 	dirThumbs.listDir(directory);
 	dirThumbs.allowExt("png");
 	dirThumbs.allowExt("PNG");
@@ -246,7 +250,21 @@ void ofxLitSphere::draw_ImGui(int x, int y, int w, int h, int amntPerRow) {
 
 	ImGui::Begin("MAPCAP");
 	{
+		//mark border on selected
+		ImGuiStyle *style = &ImGui::GetStyle();
+		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];//better for my theme
+		const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
+		const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+
 		for (int i = 0; i < dirThumbs.size(); i++) {
+			if (i == indexBrowser) {
+				//ImGui::PushID("_indexBrowser_");
+				//ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
+				//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
+				//ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+			}
+
+			//-
 
 			if (ImGui::ImageButton(GetImTextureID(textureSourceID[i]), ImVec2(tw, th)))
 			{
@@ -262,6 +280,14 @@ void ofxLitSphere::draw_ImGui(int x, int y, int w, int h, int amntPerRow) {
 			else {
 				if (i % amntPerRow != 0) ImGui::SameLine();
 			}
+
+			//-
+
+			if (i == indexBrowser) {
+				//ImGui::PopStyleColor(3);
+				//ImGui::PopID();
+			}
+
 		}
 	}
 	ImGui::End();

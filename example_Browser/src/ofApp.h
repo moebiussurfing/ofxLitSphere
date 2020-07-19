@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxLitSphere.h"
+#include "ofxAssimpModelLoader.h"
 
 class ofApp : public ofBaseApp{
     
@@ -23,4 +24,8 @@ public:
 	ofPlanePrimitive primFloor; // just using a primitive as floor
 
 	bool bEnableMouseCam;
+
+	ofxAssimpModelLoader model;
+
+	ofRectangle rView;
 };

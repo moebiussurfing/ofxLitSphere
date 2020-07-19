@@ -11,16 +11,20 @@ void ofApp::setup() {
 
 	ofSetConeResolution(40, 40, 40);
 
-	indexScene = 0;
+	indexScene = 0;//0:prims 1:obj
+
+	model.loadModel("head.obj", 10);
+
 	meshForm.load("basic_form.ply");
-	//meshForm.load("head.obj.ply");
-	
+	//meshForm.load("head.obj");//not loading
+
 	primFloor.set(1000, 1000);
 	//primFloor.setPosition(0, -500, 0);
 	primFloor.rotateDeg(90, { 1,0,0 });
 
 	//cam.lookAt(glm::vec3(0, 0, 0));
 	//cam.setPosition(glm::vec3(0, 2000, 0));
+	rView = ofRectangle(ofGetWidth() / 3.f, 0, ofGetWidth() * (2/ 3.f), ofGetHeight());
 }
 
 //--------------------------------------------------------------
@@ -46,9 +50,9 @@ void ofApp::draw() {
 	//-
 
 	ofEnableDepthTest();
-	
-	cam.begin();
-	
+
+	cam.begin(rView);
+
 	//ofLight light; // also works with ofNode
 	//light.setPosition(glm::vec3(4, 2.8, 5));
 	//light.lookAt(glm::vec3(0, 0, 0));
@@ -66,16 +70,30 @@ void ofApp::draw() {
 			}
 			ofPopMatrix();
 		}
+
 		else if (indexScene == 1) {
 			////ofTranslate(0, 500);
 			//primFloor.draw();
 
 			ofPushMatrix();
-			float scale = 250;
-			ofScale(scale, scale, scale);
-			ofRotateYDeg(75);
 
-			meshForm.draw();
+			{
+			//float scale = 250;
+			//ofScale(scale, scale, scale);
+			//ofRotateYDeg(75);
+			//meshForm.draw();
+			}
+
+			{
+				float scale = 0.5f;
+				ofTranslate(0, -250, 0);
+				ofScale(scale, scale, scale);
+				ofRotateXDeg(180);
+				ofRotateY(ofGetFrameNum());
+				//ofRotateYDeg(180);
+				// draws all the other file types which are loaded into model.
+				model.drawFaces();
+			}
 
 			ofPopMatrix();
 		}
