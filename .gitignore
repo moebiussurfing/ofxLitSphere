@@ -7,17 +7,21 @@
 ## can exclude some sttings files
 
 *.ini
-*.png
-*.PNG
-*.jpg
-*.JPG
+#*.png
+#*.PNG
+#*.jpg
+#*.JPG
 
 #*.XML
 #*.xml
 #*.JSON
 #*.json
 
-#*/bin/*
+*/bin/*.jpg
+*/bin/*.JPG
+*/bin/*.png
+*/bin/*.PNG
+
 #!*/bin/data/
 #[Bb]in/
 

@@ -3,7 +3,7 @@ ofxLitSphere
 
 ## Notes by @moebiusSrufing:
 
-** This is a fork that pretends to add: **  
+**This is a fork that pretends to add**  
 
 - A helper ready-to-use engine to browse cap files and preview thumbnails.  
 - A nice packed kit of the awesome **matcaps** files from @nidorx:  
@@ -15,10 +15,12 @@ https://github.com/nidorx/matcaps
 ![Alt text](readme_images/screenshot4.PNG?raw=true "screenshot4")  
 
 ### How to set the matcaps files:  
-https://github.com/nidorx/matcaps/tree/v1.0/512 -> `OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\Lib`
+https://github.com/nidorx/matcaps/tree/v1.0/512 ->  
+`OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\Lib`
 ![Alt text](readme_images/dataFiles1.PNG?raw=true "dataFiles1")  
 
-https://github.com/nidorx/matcaps/tree/v1.0/preview -> `OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\previews`
+https://github.com/nidorx/matcaps/tree/v1.0/preview ->  
+`OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\previews`
 ![Alt text](readme_images/dataFiles2.PNG?raw=true "dataFiles2")  
 
 ### Dependecies:  
