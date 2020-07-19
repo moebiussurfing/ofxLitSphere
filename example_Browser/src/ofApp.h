@@ -14,18 +14,18 @@ public:
     void mousePressed(int x, int y, int button);
     void keyPressed(int key);
     void keyReleased(int key);
-    
-    ofxLitSphere litSphere;
 	
 	ofEasyCam cam;
+	ofRectangle rView;
+	bool bEnableMouseCam;
+    
+    ofxLitSphere litSphere;
 
 	bool indexScene;
-	ofMesh meshForm;
-	ofPlanePrimitive primFloor; // just using a primitive as floor
-
-	bool bEnableMouseCam;
-
+	
+	//1A
 	ofxAssimpModelLoader model;
-
-	ofRectangle rView;
+	//1B
+	//ofMesh meshForm;
+	//ofPlanePrimitive primFloor; // just using a primitive as floor
 };
