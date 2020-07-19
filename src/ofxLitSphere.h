@@ -49,6 +49,7 @@ private:
 	string pathFull;
 
 	string matName;
+public:
 	string getName()
 	{
 		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/\\";
@@ -56,6 +57,7 @@ private:
 		ofLogNotice() << __FUNCTION__ << "_names[1]: " << _names[1];
 		return _names[1];
 	}
+private:
 	string getPath()
 	{
 		pathFull = pathGlobal + "/" + "MatCapZBrush/Lib/";

@@ -21,11 +21,13 @@ public:
     
     ofxLitSphere litSphere;
 
-	bool indexScene;
-	
+	int indexScene;
+
 	//1A
 	ofxAssimpModelLoader model;
 	//1B
 	//ofMesh meshForm;
-	//ofPlanePrimitive primFloor; // just using a primitive as floor
+
+	bool bDrawFloor = false;
+	ofPlanePrimitive primFloor; // just using a primitive as floor
 };

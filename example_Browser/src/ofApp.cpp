@@ -13,9 +13,14 @@ void ofApp::setup() {
 
 	//scene
 
-	//0:prims or 1:obj : 
-	//set manualy by yourself here
-	indexScene = 1;
+	//floor
+	primFloor.set(10000, 10000);
+	primFloor.rotateDeg(90, { 1,0,0 });
+	//primFloor.setPosition(0, -500, 0);
+
+	//0:prims or 1:obj
+	//press return to switch scene
+	indexScene = 0;
 
 	//0
 	ofSetConeResolution(40, 40, 40);
@@ -27,17 +32,13 @@ void ofApp::setup() {
 	//meshForm.load("basic_form.ply");
 	////meshForm.load("head.obj");//not loading
 
-	//primFloor.set(1000, 1000);
-	////primFloor.setPosition(0, -500, 0);
-	//primFloor.rotateDeg(90, { 1,0,0 });
-
 	//-
 
-	//cam
-	
+	//camera
+
 	//cam.lookAt(glm::vec3(0, 0, 0));
 	//cam.setPosition(glm::vec3(0, 2000, 0));
-	rView = ofRectangle(ofGetWidth() / 3.f, 0, ofGetWidth() * (2/ 3.f), ofGetHeight());
+	rView = ofRectangle(ofGetWidth() / 4.f, 0, ofGetWidth() * (3 / 4.f), ofGetHeight());
 }
 
 //--------------------------------------------------------------
@@ -56,7 +57,7 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofClear(32);
+	ofClear(16);
 	//ofPushMatrix();
 	//ofScale(2, 2);
 	//ofBackgroundGradient(ofColor(32), ofColor(0), OF_GRADIENT_CIRCULAR);
@@ -73,6 +74,16 @@ void ofApp::draw() {
 		//light.setPosition(glm::vec3(4, 2.8, 5));
 		//light.lookAt(glm::vec3(0, 0, 0));
 
+		if (bDrawFloor) {
+			ofPushMatrix();
+			ofPushStyle();
+			ofSetColor(8);
+			ofTranslate(0, -700);
+			primFloor.draw();
+			ofPopStyle();
+			ofPopMatrix();
+		}
+		
 		litSphere.begin();
 		{
 			//draw your scene here!...
@@ -93,19 +104,15 @@ void ofApp::draw() {
 
 			else if (indexScene == 1) {
 
-				//1B
-				////ofTranslate(0, 500);
-				//primFloor.draw();
-
 				ofPushMatrix();
-				
+
 				//1B
-				{
+				//{
 					//float scale = 250;
 					//ofScale(scale, scale, scale);
 					//ofRotateYDeg(75);
 					//meshForm.draw();
-				}
+				//}
 
 				//1A
 				{
@@ -135,7 +142,7 @@ void ofApp::draw() {
 	litSphere.drawGui();
 #endif
 
-	if (!litSphere.isVisibleGui()) ofDrawBitmapStringHighlight("CLICK TO CHANGE SOURSE", ofPoint(0, -200));
+	if (!litSphere.isVisibleGui()) ofDrawBitmapStringHighlight("CLICK TO CHANGE MAT-CAP:\n"+ litSphere.getName(), ofPoint(ofGetWidth()*0.5, 50));
 }
 
 //--------------------------------------------------------------
@@ -151,8 +158,15 @@ void ofApp::keyPressed(int key)
 		cam.enableMouseInput();
 	}
 
-	else if (key == ' ') litSphere.loadNext();
-	
+	else if (key == ' ') litSphere.loadNext();//load next cap
+
+	else if (key == 'f') bDrawFloor = !bDrawFloor;//enable draw floor
+
+	else if (key == OF_KEY_RETURN) {//return to change scene
+		if (indexScene == 0) indexScene++;
+		else if (indexScene == 1) indexScene = 0;
+	}
+
 	//hide gui to enable disable gui and browse by keys and mouse clicks
 	else if (key == 'g') litSphere.setToggleVisibleGui();
 }
