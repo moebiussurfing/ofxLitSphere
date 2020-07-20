@@ -9,10 +9,10 @@ ofxLitSphere
 - **/example_Browser**: A nice packed kit of the awesome **matcaps** files from **@nidorx**:  
 https://github.com/nidorx/matcaps
 
-![Alt text](readme_images/screenshot1.PNG?raw=true "screenshot1")  
-![Alt text](readme_images/screenshot2.PNG?raw=true "screenshot2")  
-![Alt text](readme_images/screenshot3.PNG?raw=true "screenshot3")  
-![Alt text](readme_images/screenshot4.PNG?raw=true "screenshot4")  
+![image](readme_images/screenshot1.PNG?)  
+![image](readme_images/screenshot2.PNG?)  
+![image](readme_images/screenshot3.PNG?raw=true "screenshot3")  
+![image](readme_images/screenshot4.PNG?raw=true "screenshot4")  
 
 ### How to set the matcaps files:  
 https://github.com/nidorx/matcaps/tree/v1.0/512 ->  
