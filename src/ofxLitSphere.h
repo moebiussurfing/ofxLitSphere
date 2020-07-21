@@ -2,6 +2,14 @@
 
 #include "ofMain.h"
 
+//-
+//
+// DEFINES
+
+#define USE_FILE_BROWSER	//use ImGui: browse materials and tweak some settings
+
+//-
+
 
 ///	TODO:
 ///		++ customizable global path: thumbs/mats. 
@@ -12,7 +20,6 @@
 ///		+ clean code
 
 
-#define USE_FILE_BROWSER
 #ifdef USE_FILE_BROWSER
 #include "ofxImGui.h"
 #endif
@@ -27,13 +34,19 @@ public:
 	void loadPrevious();
 
 	int getCurrentIndex();
-	void reloadShader();
 
 	//-
 
 	//feed scene draw
 	void begin();
 	void end();
+
+	//-
+
+private:
+
+	ofParameter<std::string> nameMat;
+	void reloadShader();
 
 public:
 	void setup();
@@ -44,12 +57,12 @@ public:
 
 	//gui and settings
 	ofParameter<int> sizeThumb;
-	ofParameter<std::string> nameMat;
 	ofParameter<int> indexBrowser;
 	//bool bAutoResize;//TODO:
 
 #endif
 
+public:
 	void keyPressed(int key);//not subscribed callback
 
 private:
@@ -81,25 +94,29 @@ private:
 	string pathDirPreviews = "-1";
 
 	//browser
-#ifdef USE_FILE_BROWSER
-
-private:
 	string mapCapName;
 	string inputPath;
 
-	bool bShowGui;
-	bool bShowBrowser = true;
+	//-
 
 public:
+	bool bShowGui;
+	bool isVisibleGui() {
+		return bShowGui;
+	}
 	void setVisibleGui(bool b) {
 		bShowGui = b;
 	}
 	void setToggleVisibleGui() {
 		bShowGui = !bShowGui;
 	}
-	bool isVisibleGui() {
-		return bShowGui;
-	}
+
+	//-
+
+#ifdef USE_FILE_BROWSER
+
+private:
+	bool bShowBrowser = true;
 
 	//browser
 private:
@@ -182,4 +199,5 @@ private:
 	}
 	
 	#endif
+
 };

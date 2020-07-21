@@ -13,6 +13,7 @@ https://github.com/nidorx/matcaps
 ![image](readme_images/screenshot6.PNG?raw=true "screenshot6")  
 ![image](readme_images/screenshot7.PNG?raw=true "screenshot7")  
 ![image](readme_images/screenshot1.PNG?raw=true "screenshot1")  
+![image](readme_images/screenshot1.PNG?raw=true "screenshot8")  
 
 ### How to set the matcaps files:  
 https://github.com/nidorx/matcaps/tree/v1.0/512 ->  

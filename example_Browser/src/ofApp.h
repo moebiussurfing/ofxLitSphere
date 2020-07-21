@@ -1,7 +1,12 @@
 #pragma once
 
 #include "ofMain.h"
+
+#include "ofxGui.h"
+
 #include "ofxLitSphere.h"
+#include "DisplacementSphereMesh.h"
+
 #include "ofxAssimpModelLoader.h"
 
 class ofApp : public ofBaseApp{
@@ -17,16 +22,38 @@ public:
 	
 	ofEasyCam cam;
 	bool bEnableMouseCam;
+	bool bDrawFloor;
+	bool bHelp;
     
     ofxLitSphere litSphere;
 
-	int indexScene;
+	ofParameter<int> indexScene{ "SCENE", 0,0,2 };
 
-	//1A
+	//model
 	ofxAssimpModelLoader model;
-	//1B
+	//mesh
 	//ofMesh meshForm;
 
-	bool bDrawFloor;
-	bool bHelp;
+	//--
+
+	//displacement example
+	void setupDisplacement();
+	void updateDisplacement();
+
+	DisplacementSphereMesh displacement;
+	ofMaterial material;
+	ofLight light;
+
+	//params
+	ofParameterGroup params_Displacement;
+	ofParameter<bool> bmat1;
+	ofParameter<bool> bmat2;
+	ofParameter<int> mat1;
+	ofParameter<int> mat2;
+	ofParameter<bool> bLights;
+	ofParameter<float> mod;
+	ofxPanel gui;
+
+	//--
+
 };

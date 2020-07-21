@@ -9,9 +9,12 @@ void ofxLitSphere::setup() {
 	ofDisableNormalizedTexCoords();
 	ofEnableAlphaBlending();
 
+
+#ifdef USE_FILE_BROWSER
 	indexBrowser.set("MatCap Index", -1, 0, 1);
 	nameMat.set("MatCap name", "");
 	sizeThumb.set("THUMB SIZE", 100, 40, 300);
+#endif
 
 	indexMat = 0;
 	shaderMat.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
@@ -19,7 +22,10 @@ void ofxLitSphere::setup() {
 	pathDirMats = pathGlobal + "/MatCapZBrush/Lib/";
 	dirMats.listDir(pathDirMats);
 	sizeDirMats = dirMats.size();
+	
+#ifdef USE_FILE_BROWSER
 	indexBrowser.setMax(dirMats.size() - 1);
+#endif
 
 	loadAt(indexMat);
 
@@ -60,7 +66,10 @@ void ofxLitSphere::loadAt(int number) {
 	pathDirMats = pathGlobal + "/MatCapZBrush/Lib/";
 	dirMats.listDir(pathDirMats);
 	sizeDirMats = dirMats.size();
+	
+#ifdef USE_FILE_BROWSER
 	indexBrowser.setMax(dirMats.size() - 1);
+#endif
 
 	if (dirMats.size() <= 0) {
 		ofLogFatalError(__FUNCTION__) << "FILES NOT FOUND! " + pathDirMats;
@@ -71,16 +80,21 @@ void ofxLitSphere::loadAt(int number) {
 
 		if (indexMat > dirMats.size() - 1) indexMat = 0;
 		//if (indexMat > dir.size() - 1) indexMat = dir.size() - 1;
-
+				
+#ifdef USE_FILE_BROWSER
 		indexBrowser = indexMat;
+#endif
 
 		string fileName = dirMats.getPath(indexMat);
 		ofLogNotice(__FUNCTION__) << "fileName " + fileName;
 		textureMat.load(fileName);
 
 		matName = fileName;
+
+#ifdef USE_FILE_BROWSER
 		mapCapName = "[" + ofToString(getCurrentIndex()) + "] " + getName();
 		nameMat = getName();
+#endif
 	}
 
 	ofEnableArbTex();
@@ -198,26 +212,34 @@ void ofxLitSphere::updateGui() {
 void ofxLitSphere::draw_ImGui(int x, int y, int w, int h) {
 
 	auto mainSettings = ofxImGui::Settings();
-
 	//ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
 	//ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
+	//ImGui::Text("ofxLitSphere");
 
 	//--
 
-	//ImGui::Begin("Settings");//raw
 	if (ofxImGui::BeginWindow("Settings", mainSettings, false))//->required to allow helpers..but do not stores ini settings..
+	//ImGui::Begin("Settings");//raw
 	{
-		//ImGui::Text("ofxLitSphere");
 		ofxImGui::AddParameter(sizeThumb);
 		string str0 = ofToString(indexBrowser);
 		string str1 = str0 + "/" + ofToString(dirThumbs.size()-1);
 		ImGui::Text(str1.c_str());
+		ImGui::Text(nameMat.get().c_str());
 		//ofxImGui::AddParameter(indexBrowser);
 		//ofxImGui::AddParameter(nameMat);
-		ImGui::Text(nameMat.get().c_str());
 	}
-	ofxImGui::EndWindow(mainSettings);
 	//ImGui::End();//raw
+	ofxImGui::EndWindow(mainSettings);
+
+	//--
+
+	////Displacement
+	//if (ofxImGui::BeginWindow("Displacement", mainSettings, false))//->required to allow helpers..but do not stores ini settings..
+	//{
+	//	ofxImGui::AddGroup(params_Displacement, mainSettings);
+	//}
+	//ofxImGui::EndWindow(mainSettings);
 
 	//--
 
@@ -274,17 +296,17 @@ void ofxLitSphere::draw_ImGui(int x, int y, int w, int h) {
 	ImGui::End();
 	//ofxImGui::EndWindow(mainSettings);
 }
+#endif
 
 //--------------------------------------------------------------
 void ofxLitSphere::keyPressed(int key) {
-	if (key == OF_KEY_DOWN)
+	if (key == OF_KEY_LEFT)
 	{
 		loadPrevious();
 	}
-	else if (key == OF_KEY_UP)
+	else if (key == OF_KEY_RIGHT)
 	{
 		loadNext();
 	}
 }
 
-#endif

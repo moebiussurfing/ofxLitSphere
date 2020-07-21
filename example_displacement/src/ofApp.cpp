@@ -3,23 +3,25 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    //ofSetDataPathRoot("../../../../../data/");
-    
     ofSetLogLevel(OF_LOG_VERBOSE);
+    
+    //ofSetDataPathRoot("../../../../../data/");
     //ofDisableArbTex();
     //ofEnableDepthTest();
 
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
 
+    ofSetConeResolution(40, 40, 40);
+
+	//--
+
     litSphere.setup();
     litSphere.loadAt(2);
 
     litSphere02.setup();
     litSphere02.loadAt(24);
-    
-    ofSetConeResolution(40, 40, 40);
-    
+        
     displacement.setup();
     
     light.setAmbientColor(ofColor(200));
@@ -33,13 +35,16 @@ void ofApp::setup(){
     material.setEmissiveColor(ofFloatColor(10.0));
     material.setShininess(0.8);
 
+	//--
+
 	gui.setup();
-	gui.add(mod.set("mod", 0, 0, 1));
+	gui.add(mod.set("mod", 0.8, 0, 2));
 	gui.add(bmat1.set("mat1",true));
 	gui.add(bmat2.set("mat2",false));
-	gui.add(mat1.set("mat1", 0, 0, 20));
-	gui.add(mat2.set("mat2", 0, 0, 20));
+	//gui.add(mat1.set("mat1", 0, 0, 20));
+	//gui.add(mat2.set("mat2", 0, 0, 20));
 	gui.add(displacement.params);
+	gui.setPosition(10, 100);
 }
 
 //--------------------------------------------------------------
@@ -84,8 +89,6 @@ void ofApp::draw(){
 		litSphere02.end();
 	}
 
-    //light.disable();    
-
     //light.disable();
 
     cam.end();
@@ -101,19 +104,17 @@ void ofApp::draw(){
 
 	ofDisableDepthTest();
 	ofSetColor(255);
-    ofDrawBitmapString(". , change sourse", ofPoint(20, 20));
+    ofDrawBitmapString("PRESS SPACE TO CHANGE MATERIAL", ofPoint(20, 20));
 
 	gui.draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    
     if (key == 'f') ofToggleFullscreen();
-    if (key == '.') litSphere.loadNext();
+    if (key == ' ') litSphere.loadNext();
     if (key == ',') litSphere.loadPrevious();
-    if (key == ' ') ofLogVerbose(ofToString(litSphere.getCurrent()) + " " + ofToString(litSphere02.getCurrent()) + " " + ofToString(ofGetMouseY()));
-        
+    if (key == ' ') ofLogVerbose(ofToString(litSphere.getCurrentIndex()) + " " + ofToString(litSphere02.getCurrentIndex()) + " " + ofToString(ofGetMouseY()));
 }
 
 //--------------------------------------------------------------
