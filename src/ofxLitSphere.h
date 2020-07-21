@@ -4,10 +4,12 @@
 
 
 ///	TODO:
+///		++ customizable global path: thumbs/mats. 
+///			also out of /data to share map-cap files with other apps
 ///		+ save/load settings by name
 ///		+ add text arb push/pop to avoid collide with other addons render
+///		+ handle enable keys
 ///		+ clean code
-///		+ customizable global path. also out of /data to share map-cap files with other apps
 
 
 #define USE_FILE_BROWSER
@@ -18,16 +20,18 @@
 class ofxLitSphere {
 
 public:
-	//TODO:
-	//must update gui index selector
+
 	void loadAt(int number);
 	void loadFilename(string name);
 	void loadNext();
 	void loadPrevious();
 
-	int getCurrent();
-	void reload();
+	int getCurrentIndex();
+	void reloadShader();
 
+	//-
+
+	//feed scene draw
 	void begin();
 	void end();
 
@@ -37,16 +41,20 @@ public:
 #ifdef USE_FILE_BROWSER
 	void update();
 	void drawGui();
-	int indexBrowser = -1;
-	bool bAutoResize;//TODO:
+
+	//gui and settings
+	ofParameter<int> sizeThumb;
+	ofParameter<std::string> nameMat;
+	ofParameter<int> indexBrowser;
+	//bool bAutoResize;//TODO:
+
 #endif
 
-	void keyPressed(int key);
+	void keyPressed(int key);//not subscribed callback
 
 private:
 	string pathGlobal = "ofxLitSphere";
 	string pathFull;
-
 	string matName;
 public:
 	string getName()
@@ -64,10 +72,13 @@ private:
 	}
 
 private:
-	ofImage mapTexture;
-	ofShader shader;
-	ofDirectory dir;
-	int current;
+	ofImage textureMat;
+	ofShader shaderMat;
+	ofDirectory dirMats;
+	int indexMat;
+	int sizeDirMats = -1;
+	string pathDirMats = "-1";
+	string pathDirPreviews = "-1";
 
 	//browser
 #ifdef USE_FILE_BROWSER
@@ -96,7 +107,7 @@ private:
 	void updateGui();
 
 	ofxImGui::Gui gui_ImGui;
-	void draw_ImGui(int x, int y, int w, int h, int amntPerRow = 1);
+	void draw_ImGui(int x, int y, int w, int h);
 
 private:
 	ofDirectory dirThumbs;
@@ -169,5 +180,6 @@ private:
 		colors[ImGuiCol_NavWindowingDimBg] = { 0.80f, 0.80f, 0.80f, 0.20f };
 		colors[ImGuiCol_ModalWindowDimBg] = { 0.11f, 0.13f, 0.13f, 0.35f };
 	}
+	
 	#endif
 };

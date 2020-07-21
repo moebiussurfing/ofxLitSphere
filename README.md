@@ -9,19 +9,19 @@ ofxLitSphere
 - **/example_Browser**: A nice packed kit of the awesome **matcaps** files from **@nidorx**:  
 https://github.com/nidorx/matcaps
 
-![Alt text](readme_images/screenshot1.PNG?raw=true "screenshot1")  
-![Alt text](readme_images/screenshot2.PNG?raw=true "screenshot2")  
-![Alt text](readme_images/screenshot3.PNG?raw=true "screenshot3")  
-![Alt text](readme_images/screenshot4.PNG?raw=true "screenshot4")  
+![image](readme_images/screenshot5.PNG?raw=true "screenshot5")  
+![image](readme_images/screenshot6.PNG?raw=true "screenshot6")  
+![image](readme_images/screenshot7.PNG?raw=true "screenshot7")  
+![image](readme_images/screenshot1.PNG?raw=true "screenshot1")  
 
 ### How to set the matcaps files:  
 https://github.com/nidorx/matcaps/tree/v1.0/512 ->  
 `OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\Lib`
-![Alt text](readme_images/dataFiles1.PNG?raw=true "dataFiles1")  
+![image](readme_images/dataFiles1.PNG?raw=true "dataFiles1")  
 
 https://github.com/nidorx/matcaps/tree/v1.0/preview ->  
 `OF\addons\ofxLitSphere\example_Browser\bin\data\ofxLitSphere\MatCapZBrush\previews`
-![Alt text](readme_images/dataFiles2.PNG?raw=true "dataFiles2")  
+![image](readme_images/dataFiles2.PNG?raw=true "dataFiles2")  
 
 Both folders must have the same number of files:  
 thumbnail goes to `/preview` and the cap file into `\Lib`. (Two files per preset)

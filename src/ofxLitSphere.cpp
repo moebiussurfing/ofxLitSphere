@@ -9,19 +9,25 @@ void ofxLitSphere::setup() {
 	ofDisableNormalizedTexCoords();
 	ofEnableAlphaBlending();
 
-	current = 0;
+	indexBrowser.set("MatCap Index", -1, 0, 1);
+	nameMat.set("MatCap name", "");
+	sizeThumb.set("THUMB SIZE", 100, 40, 300);
 
-	shader.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
-	
-	//workaround to startup refresh 
-	loadNext();
-	loadPrevious();
+	indexMat = 0;
+	shaderMat.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
+
+	pathDirMats = pathGlobal + "/MatCapZBrush/Lib/";
+	dirMats.listDir(pathDirMats);
+	sizeDirMats = dirMats.size();
+	indexBrowser.setMax(dirMats.size() - 1);
+
+	loadAt(indexMat);
 
 	ofEnableArbTex();
 
 #ifdef USE_FILE_BROWSER
 	bShowGui = true;
-	bAutoResize = true;
+	//bAutoResize = true;
 	setupGui();
 #endif
 }
@@ -30,14 +36,19 @@ void ofxLitSphere::setup() {
 void ofxLitSphere::loadFilename(string name) {
 	ofDisableArbTex();
 
-	string fileName = pathGlobal + "/MatCapZBrush/Lib/" + name;
+	//string fileName = pathGlobal + "/MatCapZBrush/Lib/" + name;
+	string fileName = pathDirMats + name;
 
-	bool b = mapTexture.load(fileName);
+	bool b = textureMat.load(fileName);
 	if (!b)
 	{
-		ofLogError(__FUNCTION__) << "Mat file not found! Load first located mat file.";
+		ofLogFatalError(__FUNCTION__) << "Mat file not found! Force load first located mat file...";
 		loadAt(0);
 	}
+
+	matName = fileName;
+	mapCapName = "[" + ofToString(getCurrentIndex()) + "] " + getName();
+	nameMat = getName();
 
 	ofEnableArbTex();
 }
@@ -46,60 +57,58 @@ void ofxLitSphere::loadFilename(string name) {
 void ofxLitSphere::loadAt(int number) {
 	ofDisableArbTex();
 
-	string directory = pathGlobal + "/MatCapZBrush/Lib/";
-	dir.listDir(directory);
+	pathDirMats = pathGlobal + "/MatCapZBrush/Lib/";
+	dirMats.listDir(pathDirMats);
+	sizeDirMats = dirMats.size();
+	indexBrowser.setMax(dirMats.size() - 1);
 
-	current = number;
-	if (dir.size() <= current) current = 0;
+	if (dirMats.size() <= 0) {
+		ofLogFatalError(__FUNCTION__) << "FILES NOT FOUND! " + pathDirMats;
+		sizeDirMats = -1;
+	}
+	else {
+		indexMat = number;
 
-	string fileName = dir.getPath(current);
-	ofLogNotice(__FUNCTION__) << "fileName " + fileName;
-	mapTexture.load(fileName);
+		if (indexMat > dirMats.size() - 1) indexMat = 0;
+		//if (indexMat > dir.size() - 1) indexMat = dir.size() - 1;
+
+		indexBrowser = indexMat;
+
+		string fileName = dirMats.getPath(indexMat);
+		ofLogNotice(__FUNCTION__) << "fileName " + fileName;
+		textureMat.load(fileName);
+
+		matName = fileName;
+		mapCapName = "[" + ofToString(getCurrentIndex()) + "] " + getName();
+		nameMat = getName();
+	}
 
 	ofEnableArbTex();
 }
 
 //--------------------------------------------------------------
 void ofxLitSphere::loadNext() {
-	ofDisableArbTex();
+	//dirMats.listDir(pathGlobal + "/MatCapZBrush/Lib/");
+	dirMats.listDir(pathDirMats);
 
-	string directory = pathGlobal + "/MatCapZBrush/Lib/";
-	dir.listDir(directory);
-
-	current++;
-	if (dir.size() <= current) current = 0;
-	string fileName = dir.getPath(current);
-
-	ofLogNotice(__FUNCTION__) << "fileName " + fileName;
-	mapTexture.load(fileName);
-
-	matName = fileName;
-
-	ofEnableArbTex();
+	indexMat++;
+	if (indexMat > dirMats.size() - 1) indexMat = 0;
+	loadAt(indexMat);
 }
 
 //--------------------------------------------------------------
 void ofxLitSphere::loadPrevious() {
-	ofDisableArbTex();
+	//dirMats.listDir(pathGlobal + "/MatCapZBrush/Lib/");
+	dirMats.listDir(pathDirMats);
 
-	string directory = pathGlobal + "/MatCapZBrush/Lib/";
-	dir.listDir(directory);
-
-	current--;
-	if (current < 0) current = dir.size() - 1;
-
-	string fileName = dir.getPath(current);
-	ofLogNotice(__FUNCTION__) << "fileName " + fileName;
-	mapTexture.load(fileName);
-
-	matName = fileName;
-
-	ofEnableArbTex();
+	indexMat--;
+	if (indexMat < 0) indexMat = 0;
+	loadAt(indexMat);
 }
 
 //--------------------------------------------------------------
-int ofxLitSphere::getCurrent() {
-	return current;
+int ofxLitSphere::getCurrentIndex() {
+	return indexMat;
 }
 
 
@@ -107,20 +116,20 @@ int ofxLitSphere::getCurrent() {
 void ofxLitSphere::begin() {
 	ofEnableNormalizedTexCoords();
 	ofEnableTextureEdgeHack();
-	shader.begin();
-	shader.setUniformTexture("litsphereTexture", mapTexture, 1);
+	shaderMat.begin();
+	shaderMat.setUniformTexture("litsphereTexture", textureMat, 1);
 }
 
 //--------------------------------------------------------------
 void ofxLitSphere::end() {
-	shader.end();
+	shaderMat.end();
 	ofDisableNormalizedTexCoords();
 	ofDisableTextureEdgeHack();
 }
 
 //--------------------------------------------------------------
-void ofxLitSphere::reload() {
-	shader.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
+void ofxLitSphere::reloadShader() {
+	shaderMat.load(pathGlobal + "/shaders/litsphere/vert.glsl", pathGlobal + "/shaders/litsphere/frag.glsl");
 }
 
 //---
@@ -137,20 +146,17 @@ void ofxLitSphere::update() {
 
 //--------------------------------------------------------------
 void ofxLitSphere::drawGui() {
+	if (bShowGui) {
 #ifdef USE_FILE_BROWSER
-	if (bShowBrowser && bShowGui) {
-		//draw_ImGui();
-
-		//ImGui::SetNextWindowSize(ofVec2f(400, 100), ImGuiCond_FirstUseEver);
-
-		gui_ImGui.begin();
-		{
-			draw_ImGui(10, 10, 300, 800, 3);//window position, size, amount of thumbs per row
-			//draw_ImGui(10, 10, 300, 800, 6);//window position, size, amount of thumbs per row
+		if (bShowBrowser) {
+			gui_ImGui.begin();
+			{
+				draw_ImGui(10, 10, 300, 800);//window position and size
+			}
+			gui_ImGui.end();
 		}
-		gui_ImGui.end();
-	}
 #endif
+	}
 }
 
 //--------------------------------------------------------------
@@ -162,21 +168,13 @@ void ofxLitSphere::setupGui() {
 	//theme
 	ModernDarkTheme();
 
-	//inputPath = ofFilePath::getAbsolutePath("input");
-	//ofStringReplace(inputPath, "/", "\\");
-
-	ImGui::GetIO().MouseDrawCursor = false;
-
-	//dirRefresh();
+	//ImGui::GetIO().MouseDrawCursor = false;
 
 	//-
 
-	//populate thumbs
-	inputPath = "ofxLitSphere/MatCapZBrush/Lib/";
-
-	string directory = pathGlobal + "/MatCapZBrush/previews/";
-	//string directory = pathGlobal + "/MatCapZBrush/Lib/";
-	dirThumbs.listDir(directory);
+	//scan, load and populate thumbs
+	pathDirPreviews = pathGlobal + "/MatCapZBrush/previews/";
+	dirThumbs.listDir(pathDirPreviews);
 	dirThumbs.allowExt("png");
 	dirThumbs.allowExt("PNG");
 	dirThumbs.allowExt("jpg");
@@ -197,70 +195,84 @@ void ofxLitSphere::updateGui() {
 }
 
 //--------------------------------------------------------------
-void ofxLitSphere::draw_ImGui(int x, int y, int w, int h, int amntPerRow) {
+void ofxLitSphere::draw_ImGui(int x, int y, int w, int h) {
 
-	bool guishow = true;
+	auto mainSettings = ofxImGui::Settings();
 
-	//thumb size
-	float tw, th;
-	//tw = th = 100;
-	//tw = th = ImGui::GetWindowWidth();
+	//ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
+	//ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
 
-	ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_FirstUseEver);
+	//--
 
-	if (!bAutoResize) {
-		w = w / (float)(amntPerRow - 1);
-		tw = th = w * 0.85;
-	}
-	else {
-		tw = th = w / (float)(amntPerRow - 1);
-	}
-
-	ImGui::Begin("MAP-CAP");
+	//ImGui::Begin("Settings");//raw
+	if (ofxImGui::BeginWindow("Settings", mainSettings, false))//->required to allow helpers..but do not stores ini settings..
 	{
-		//TODO:
-		//mark border on selected
-		ImGuiStyle *style = &ImGui::GetStyle();
-		const ImVec4 colorButton = style->Colors[ImGuiCol_Button];//better for my theme
-		const ImVec4 colorHover = style->Colors[ImGuiCol_Button];
-		const ImVec4 colorActive = style->Colors[ImGuiCol_ButtonActive];
+		//ImGui::Text("ofxLitSphere");
+		ofxImGui::AddParameter(sizeThumb);
+		string str0 = ofToString(indexBrowser);
+		string str1 = str0 + "/" + ofToString(dirThumbs.size()-1);
+		ImGui::Text(str1.c_str());
+		//ofxImGui::AddParameter(indexBrowser);
+		//ofxImGui::AddParameter(nameMat);
+		ImGui::Text(nameMat.get().c_str());
+	}
+	ofxImGui::EndWindow(mainSettings);
+	//ImGui::End();//raw
 
-		for (int i = 0; i < dirThumbs.size(); i++) {
-			if (i == indexBrowser) {
-				//ImGui::PushID("_indexBrowser_");
-				//ImGui::PushStyleColor(ImGuiCol_Button, colorButton);
-				//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colorHover);
-				//ImGui::PushStyleColor(ImGuiCol_ButtonActive, colorActive);
+	//--
+
+	//if (ofxImGui::BeginWindow("MatCap", mainSettings, false))//->required to allow helpers..but do not stores settings..
+	ImGui::Begin("MatCap");
+	{
+		ImVec2 button_sz((float)sizeThumb.get(), (float)sizeThumb.get());
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		int buttons_count = dirThumbs.size();
+		float window_visible_x2 = ImGui::GetWindowPos().x + ImGui::GetWindowContentRegionMax().x;
+
+		for (int n = 0; n < buttons_count; n++)
+		{
+			ImGui::PushID(n);
+			string name = ofToString(n);
+
+			//customize colors
+			if (n == indexBrowser)//when selected
+			{
+				const ImVec4 color1 = ImVec4(0, 0, 0, 1);//changes button color to black
+				ImGui::PushStyleColor(ImGuiCol_Button, color1);
+			}
+			else { //not selected
+				const ImVec4 color2 = style.Colors[ImGuiCol_Button];//do not changes the color
+				ImGui::PushStyleColor(ImGuiCol_Button, color2);
 			}
 
 			//-
 
-			if (ImGui::ImageButton(GetImTextureID(textureSourceID[i]), ImVec2(tw, th)))
+			//image button
+			if (ImGui::ImageButton(GetImTextureID(textureSourceID[n]), button_sz))
 			{
-				ofLogNotice(__FUNCTION__) << "[ " + ofToString(i) + " ] THUMB : " + dirThumbs.getName(i);
+				ofLogNotice(__FUNCTION__) << "[ " + ofToString(n) + " ] THUMB : " + dirThumbs.getName(n);
 
-				indexBrowser = i;
+				indexBrowser = n;
 				loadAt(indexBrowser);
 
-				mapCapName = "[" + ofToString(getCurrent()) + "] " + getName();
-			}
-
-			if (i < amntPerRow-2)	ImGui::SameLine();
-			else {
-				if (i % amntPerRow != 0) ImGui::SameLine();
+				mapCapName = "[" + ofToString(getCurrentIndex()) + "] " + getName();
+				nameMat = getName();
 			}
 
 			//-
 
-			if (i == indexBrowser) {
-				//ImGui::PopStyleColor(3);
-				//ImGui::PopID();
-			}
+			//customize colors
+			ImGui::PopStyleColor();
 
+			float last_button_x2 = ImGui::GetItemRectMax().x;
+			float next_button_x2 = last_button_x2 + style.ItemSpacing.x + button_sz.x; // Expected position if next button was on same line
+			if (n + 1 < buttons_count && next_button_x2 < window_visible_x2) ImGui::SameLine();
+			ImGui::PopID();
 		}
 	}
 	ImGui::End();
+	//ofxImGui::EndWindow(mainSettings);
 }
 
 //--------------------------------------------------------------
@@ -268,12 +280,10 @@ void ofxLitSphere::keyPressed(int key) {
 	if (key == OF_KEY_DOWN)
 	{
 		loadPrevious();
-		mapCapName = "[" + ofToString(getCurrent()) + "] " + getName();
 	}
 	else if (key == OF_KEY_UP)
 	{
 		loadNext();
-		mapCapName = "[" + ofToString(getCurrent()) + "] " + getName();
 	}
 }
 

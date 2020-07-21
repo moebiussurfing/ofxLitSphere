@@ -16,7 +16,6 @@ public:
     void keyReleased(int key);
 	
 	ofEasyCam cam;
-	ofRectangle rView;
 	bool bEnableMouseCam;
     
     ofxLitSphere litSphere;
@@ -28,6 +27,6 @@ public:
 	//1B
 	//ofMesh meshForm;
 
-	bool bDrawFloor = false;
-	ofPlanePrimitive primFloor; // just using a primitive as floor
+	bool bDrawFloor;
+	bool bHelp;
 };

@@ -9,46 +9,40 @@ void ofApp::setup() {
 	ofSetVerticalSync(true);
 	litSphere.setup();
 
+	bHelp = false;
+
 	//-
 
 	//scene
 
-	//floor
-	primFloor.set(10000, 10000);
-	primFloor.rotateDeg(90, { 1,0,0 });
-	//primFloor.setPosition(0, -500, 0);
+	bDrawFloor = true;
 
-	//0:prims or 1:obj
 	//press return to switch scene
-	indexScene = 0;
+	//0:prims or 1:models
+	indexScene = 1;
 
-	//0
+	//prims
 	ofSetConeResolution(40, 40, 40);
 
-	//1A
-	model.loadModel("head.obj", 10);
+	//models
 
-	////1B
+	//object
+	model.loadModel("obj_free_base_female_head.OBJ", 10);
+	//model.loadModel("head.obj", 10);
+	//model.loadModel("young_boy_head_obj.obj", 10);
+
+	////mesh
 	//meshForm.load("basic_form.ply");
 	////meshForm.load("head.obj");//not loading
-
-	//-
-
-	//camera
-
-	//cam.lookAt(glm::vec3(0, 0, 0));
-	//cam.setPosition(glm::vec3(0, 2000, 0));
-	rView = ofRectangle(ofGetWidth() / 4.f, 0, ofGetWidth() * (3 / 4.f), ofGetHeight());
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	if (ofGetFrameNum() == 5) {//reset cam bc bug..
+	//workaround to bug
+	if (ofGetFrameNum() == 5) {
 		bEnableMouseCam = false;
 		cam.disableMouseInput();
 	}
-
-	//--
 
 #ifdef USE_FILE_BROWSER
 	litSphere.update();
@@ -57,74 +51,70 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	ofClear(16);
-	//ofPushMatrix();
-	//ofScale(2, 2);
-	//ofBackgroundGradient(ofColor(32), ofColor(0), OF_GRADIENT_CIRCULAR);
-	//ofPopMatrix();
+	//background
+	ofBackgroundGradient(ofColor(40, 40, 40), ofColor(0, 0, 0), OF_GRADIENT_CIRCULAR);
 
 	//-
 
 	ofEnableDepthTest();
 
-	cam.begin(rView);
+	cam.begin();
 	{
 		//test lights
 		//ofLight light; // also works with ofNode
 		//light.setPosition(glm::vec3(4, 2.8, 5));
 		//light.lookAt(glm::vec3(0, 0, 0));
 
+		//draw a grid on the floor
 		if (bDrawFloor) {
 			ofPushMatrix();
 			ofPushStyle();
-			ofSetColor(8);
-			ofTranslate(0, -700);
-			primFloor.draw();
+			ofSetColor(ofColor(60));
+			ofTranslate(0, -500, 0);
+			ofRotate(90, 0, 0, -1);
+			ofDrawGridPlane(500, 5, false);
 			ofPopStyle();
 			ofPopMatrix();
 		}
-		
+
 		litSphere.begin();
 		{
 			//draw your scene here!...
 
 			//--
 
-			if (indexScene == 0) {
+			float speedRot = 0.25f;
+
+			if (indexScene == 0) {//prims
 				ofPushMatrix();
-				{
-					//ofTranslate(0, 300, 0);
-					ofRotateX(ofGetFrameNum());
-					ofDrawCone(100, 140);
-					ofDrawSphere(200, 0, 70);
-					ofDrawBox(-200, 0, 0, 80);
-				}
+
+				//ofTranslate(0, 300, 0);
+				ofRotateX(ofGetFrameNum() * speedRot);
+				ofDrawCone(100, 140);
+				ofDrawSphere(200, 0, 70);
+				ofDrawBox(-200, 0, 0, 80);
+
 				ofPopMatrix();
 			}
 
-			else if (indexScene == 1) {
+			else if (indexScene == 1) {//models
 
 				ofPushMatrix();
 
-				//1B
-				//{
-					//float scale = 250;
-					//ofScale(scale, scale, scale);
-					//ofRotateYDeg(75);
-					//meshForm.draw();
-				//}
+				//mesh
+				//float scale = 250;
+				//ofScale(scale, scale, scale);
+				//ofRotateYDeg(75);
+				//meshForm.draw();
 
-				//1A
-				{
-					float scale = 0.5f;
-					ofTranslate(0, -250, 0);
-					ofScale(scale, scale, scale);
-					ofRotateXDeg(180);
-					ofRotateY(ofGetFrameNum());
-					//ofRotateYDeg(180);
-					// draws all the other file types which are loaded into model.
-					model.drawFaces();
-				}
+				//object
+				float scale = 0.5f;
+				//ofTranslate(0, -250, 0);
+				ofScale(scale, scale, scale);
+				ofRotateXDeg(180);
+				ofRotateY(ofGetFrameNum() * speedRot);
+				//ofRotateYDeg(180);
+				model.drawFaces();
 
 				ofPopMatrix();
 			}
@@ -133,16 +123,26 @@ void ofApp::draw() {
 	}
 	cam.end();
 
-	//-
-
 	ofDisableDepthTest();
 
-	//gui browser
+	//--
+
+	//gui
+
 #ifdef USE_FILE_BROWSER
 	litSphere.drawGui();
 #endif
 
-	if (!litSphere.isVisibleGui()) ofDrawBitmapStringHighlight("CLICK TO CHANGE MAT-CAP:\n"+ litSphere.getName(), ofPoint(ofGetWidth()*0.5, 50));
+	if (bHelp) {
+		string str = "";
+		str += "KEY G: SHOW GUI\n";
+		str += "KEY RETURN: CHANGE SCENE PRIMS/MODEL\n";
+		str += "KEY CONTROL: ENABLE MOUSE CAMERA\n";
+		if (!litSphere.isVisibleGui()) {
+			str += "KEY SPACE & MOUSE CLICK: NEXT MatCap FILE " + litSphere.getName();
+		}
+		ofDrawBitmapStringHighlight(str, ofPoint(300, 20));
+	}
 }
 
 //--------------------------------------------------------------
@@ -153,28 +153,38 @@ void ofApp::mousePressed(int x, int y, int button) {
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-	if (key == OF_KEY_CONTROL) {//press control to move camera
+	litSphere.keyPressed(key);
+
+	//press control to move camera
+	if (key == OF_KEY_CONTROL) {
 		bEnableMouseCam = true;
 		cam.enableMouseInput();
 	}
 
-	else if (key == ' ') litSphere.loadNext();//load next cap
+	//load next cap
+	else if (key == ' ') litSphere.loadNext();
 
-	else if (key == 'f') bDrawFloor = !bDrawFloor;//enable draw floor
+	//enable draw floor
+	else if (key == 'f') bDrawFloor = !bDrawFloor;
 
-	else if (key == OF_KEY_RETURN) {//return to change scene
+	//return to change scene
+	else if (key == OF_KEY_RETURN) {
 		if (indexScene == 0) indexScene++;
 		else if (indexScene == 1) indexScene = 0;
 	}
 
 	//hide gui to enable disable gui and browse by keys and mouse clicks
-	else if (key == 'g') litSphere.setToggleVisibleGui();
+	else if (key == 'g' || key == 'G') litSphere.setToggleVisibleGui();
+
+	//hide help
+	else if (key == 'h' || key == 'H') bHelp = !bHelp;
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
-	if (key == OF_KEY_CONTROL) {//press control to move camera
+	//press control to move camera
+	if (key == OF_KEY_CONTROL) {
 		bEnableMouseCam = false;
 		cam.disableMouseInput();
 	}
