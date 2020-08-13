@@ -20,7 +20,7 @@ void ofApp::setup(){
     litSphere.loadAt(2);
 
     litSphere02.setup();
-    litSphere02.loadAt(24);
+    litSphere02.loadAt(2);
         
     displacement.setup();
     

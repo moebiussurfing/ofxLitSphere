@@ -9,25 +9,25 @@
 
 #include "ofxAssimpModelLoader.h"
 
-class ofApp : public ofBaseApp{
-    
+class ofApp : public ofBaseApp {
+
 public:
-    void setup();
-    void update();
-    void draw();
-    
-    void mousePressed(int x, int y, int button);
-    void keyPressed(int key);
-    void keyReleased(int key);
-	
+	void setup();
+	void update();
+	void draw();
+
+	void mousePressed(int x, int y, int button);
+	void keyPressed(int key);
+	void keyReleased(int key);
+
 	ofEasyCam cam;
 	bool bEnableMouseCam;
 	bool bDrawFloor;
 	bool bHelp;
-    
-    ofxLitSphere litSphere;
 
-	ofParameter<int> indexScene{ "SCENE", 0,0,2 };
+	ofxLitSphere litSphere;
+
+	ofParameter<int> indexScene{ "SCENE", 0, 0, 2 };
 
 	//model
 	ofxAssimpModelLoader model;
@@ -52,6 +52,7 @@ public:
 	ofParameter<int> mat2;
 	ofParameter<bool> bLights;
 	ofParameter<float> mod;
+
 	ofxPanel gui;
 
 	//--

@@ -9,8 +9,6 @@ void ofApp::setup() {
 	ofSetVerticalSync(true);
 	litSphere.setup();
 
-	setupDisplacement();
-
 	bHelp = false;
 
 	//-
@@ -22,6 +20,9 @@ void ofApp::setup() {
 	//press return to switch scene
 	//0:prims 1:displacement 2:models
 	indexScene = 1;
+
+	//mesh
+	setupDisplacement();
 
 	//prims
 	ofSetConeResolution(40, 40, 40);
@@ -73,10 +74,12 @@ void ofApp::draw() {
 		if (bDrawFloor) {
 			ofPushMatrix();
 			ofPushStyle();
-			ofSetColor(ofColor(60));
-			ofTranslate(0, -500, 0);
+			ofTranslate(0, -250, 0);
 			ofRotate(90, 0, 0, -1);
-			ofDrawGridPlane(500, 5, false);
+			ofSetColor(96, 128);
+			ofDrawGridPlane(500, 1, false);
+			ofSetColor(64, 128);
+			ofDrawGridPlane(250, 2, false);
 			ofPopStyle();
 			ofPopMatrix();
 		}
@@ -187,11 +190,11 @@ void ofApp::keyPressed(int key)
 
 	//-
 
-	//switch scene
-	if (key == 's' || key == 'S') {
-		indexScene++;
-		if (indexScene == 3) indexScene = 0;
-	}
+	////switch scene
+	//if (key == 's' || key == 'S') {
+	//	indexScene++;
+	//	if (indexScene == 3) indexScene = 0;
+	//}
 
 	//press control to move camera
 	if (key == OF_KEY_CONTROL) {
@@ -199,16 +202,16 @@ void ofApp::keyPressed(int key)
 		cam.enableMouseInput();
 	}
 
-	//load next cap
-	else if (key == ' ') litSphere.loadNext();
+	////load next cap
+	//else if (key == ' ') litSphere.loadNext();
 
 	//enable draw floor
 	else if (key == 'f') bDrawFloor = !bDrawFloor;
 
 	//return to change scene
 	else if (key == OF_KEY_RETURN) {
-		if (indexScene == 0) indexScene++;
-		else if (indexScene == 1) indexScene = 0;
+		if (indexScene != 2) indexScene++;
+		else indexScene = 0;
 	}
 
 	//hide gui to enable disable gui and browse by keys and mouse clicks
@@ -227,8 +230,6 @@ void ofApp::keyReleased(int key)
 		cam.disableMouseInput();
 	}
 }
-
-
 
 //--------------------------------------------------------------
 void ofApp::setupDisplacement() {
